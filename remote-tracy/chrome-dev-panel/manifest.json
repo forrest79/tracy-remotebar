@@ -1,0 +1,11 @@
+{
+    "manifest_version" : 2,
+
+    "name" : "RemoteTracy",
+    "version" : "0.1",
+
+    "description" : "RemoteTracy panel",
+    "author" : "Jakub Trmota | Forrest79.net",
+
+    "devtools_page" : "html/devtools.html"
+}
