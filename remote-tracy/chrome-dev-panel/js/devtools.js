@@ -1,0 +1,1 @@
+chrome.devtools.panels.create('RemoteTracy', null, '/html/panel.html', null);
