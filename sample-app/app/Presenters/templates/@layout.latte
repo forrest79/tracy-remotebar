@@ -1,10 +1,3 @@
-{**
- * @param string   $basePath web base path
- * @param array    $flashes  flash messages
- *}
-
-{import 'components/form.latte'}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,8 +6,6 @@
 	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Sandbox</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" href="{$basePath}/css/style.css">
 	{block head}{/block}
 </head>
 
@@ -27,7 +18,6 @@
 
 	{block scripts}
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
 	<script src="{$basePath}/js/main.js"></script>
 	{/block}
 </body>

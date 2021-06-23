@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Tracy;
 
-$baseUrl = $_SERVER['REQUEST_URI'] ?? '';
+$baseUrl = Debugger::remoteAssetsUrl() ?? $_SERVER['REQUEST_URI'] ?? '';
 $baseUrl .= strpos($baseUrl, '?') === false ? '?' : '&';
 $nonceAttr = $nonce ? ' nonce="' . Helpers::escapeHtml($nonce) . '"' : '';
 $asyncAttr = $async ? ' async' : '';

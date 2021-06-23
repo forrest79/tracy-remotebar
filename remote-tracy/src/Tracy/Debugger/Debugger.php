@@ -122,6 +122,11 @@ class Debugger
 	/** @var array|null */
 	private static $cpuUsage;
 
+	/********************* remote ****************d*g**/
+
+	/** @var string|NULL */
+	public static $remoteServerUrl = NULL;
+
 	/********************* services ****************d*g**/
 
 	/** @var BlueScreen */
@@ -276,10 +281,17 @@ class Debugger
 
 		self::$reserved = null;
 
-		if (self::$showBar && !self::$productionMode) {
+		if ((self::$showBar || self::$remoteServerUrl !== NULL) && !self::$productionMode) {
 			self::removeOutputBuffers(false);
 			try {
-				self::getBar()->render();
+				$bar = Helpers::capture(function (): void {
+					self::getBar()->render();
+				});
+				if (self::$remoteServerUrl === NULL) {
+					echo $bar;
+				} else {
+					self::remoteAdd($bar);
+				}
 			} catch (\Throwable $e) {
 				self::exceptionHandler($e);
 			}
@@ -327,7 +339,7 @@ class Debugger
 					. "\n");
 			}
 
-		} elseif ($firstTime && Helpers::isHtmlMode() || Helpers::isAjax()) {
+		} elseif ($firstTime && Helpers::isHtmlMode() || Helpers::isAjax() || (Debugger::$remoteServerUrl !== NULL && isset($_SERVER['HTTP_X_REQUESTED_WITH']))) {
 			self::getBlueScreen()->render($exception);
 
 		} else {
@@ -632,5 +644,57 @@ class Debugger
 			$list[] = '[::1]'; // workaround for PHP < 7.3.4
 		}
 		return in_array($addr, $list, true) || in_array("$secret@$addr", $list, true);
+	}
+
+
+	public static function remoteAdd(string $html): void
+	{
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_URL, self::remoteApiUrl());
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $html);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			'Content-Type: text/plain',
+			'Content-Length: ' . strlen($html),
+		]);
+
+		curl_exec($ch); // @todo check for error?
+	}
+
+
+	private static function remoteApiUrl(): ?string
+	{
+		if (self::$remoteServerUrl !== NULL) {
+			return rtrim(self::$remoteServerUrl, '/') . '/api/';
+		}
+
+		return NULL;
+	}
+
+
+	public static function remoteAssetsUrl(): ?string
+	{
+		if (self::$remoteServerUrl !== NULL) {
+			return rtrim(self::$remoteServerUrl, '/') . '/tracy-assets/';
+		}
+
+		return NULL;
+	}
+
+
+	public static function remoteDispatchBars(): void
+	{
+		if (self::$remoteServerUrl !== NULL && !self::$productionMode) {
+			self::removeOutputBuffers(false);
+			try {
+				self::remoteAdd(Helpers::capture(function (): void {
+					self::getBar()->render();
+				}));
+			} catch (\Throwable $e) {
+				self::exceptionHandler($e);
+			}
+		}
 	}
 }

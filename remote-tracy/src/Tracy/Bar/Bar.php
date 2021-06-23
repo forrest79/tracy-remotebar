@@ -72,6 +72,23 @@ class Bar
 	 */
 	public function render(): void
 	{
+		if (Debugger::$remoteServerUrl !== NULL) {
+			if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+				$type = 'ajax';
+
+			} elseif (preg_match('#^Location:#im', implode("\n", headers_list()))) {
+				$type = 'redirect';
+
+			} else {
+				$type = 'main';
+
+			}
+
+			$this->renderHtmlMode($type, []);
+
+			return;
+		}
+
 		$useSession = $this->useSession && session_status() === PHP_SESSION_ACTIVE;
 		$redirectQueue = &$_SESSION['_tracy']['redirect'];
 
@@ -95,24 +112,30 @@ class Bar
 			}
 
 		} elseif (Helpers::isHtmlMode()) {
-			$content = $this->renderHtml('main');
+			$this->renderHtmlMode('main', $redirectQueue);
+		}
+	}
 
-			foreach (array_reverse((array) $redirectQueue) as $item) {
-				$content['bar'] .= $item['content']['bar'];
-				$content['panels'] .= $item['content']['panels'];
-			}
-			$redirectQueue = null;
 
-			$content = '<div id=tracy-debug-bar>' . $content['bar'] . '</div>' . $content['panels'];
+	private function renderHtmlMode(string $type, $redirectQueue)
+	{
+		$content = $this->renderHtml($type);
 
-			if ($this->contentId) {
-				$_SESSION['_tracy']['bar'][$this->contentId] = ['content' => $content, 'time' => time()];
-			} else {
-				$contentId = substr(md5(uniqid('', true)), 0, 10);
-				$nonce = Helpers::getNonce();
-				$async = false;
-				require __DIR__ . '/assets/loader.phtml';
-			}
+		foreach (array_reverse((array) $redirectQueue) as $item) {
+			$content['bar'] .= $item['content']['bar'];
+			$content['panels'] .= $item['content']['panels'];
+		}
+		$redirectQueue = null;
+
+		$content = '<div id=tracy-debug-bar>' . $content['bar'] . '</div>' . $content['panels'];
+
+		if ($this->contentId) {
+			$_SESSION['_tracy']['bar'][$this->contentId] = ['content' => $content, 'time' => time()];
+		} else {
+			$contentId = substr(md5(uniqid('', true)), 0, 10);
+			$nonce = Helpers::getNonce();
+			$async = false;
+			require __DIR__ . '/assets/loader.phtml';
 		}
 	}
 

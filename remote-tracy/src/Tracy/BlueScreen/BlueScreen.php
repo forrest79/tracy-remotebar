@@ -85,6 +85,14 @@ class BlueScreen
 	 */
 	public function render(\Throwable $exception): void
 	{
+		if (Debugger::$remoteServerUrl !== NULL && isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+			Debugger::remoteAdd(Helpers::capture(function () use ($exception) {
+				$this->renderTemplate($exception, __DIR__ . '/assets/page.phtml');
+			}));
+
+			return;
+		}
+
 		if (Helpers::isAjax() && session_status() === PHP_SESSION_ACTIVE) {
 			$_SESSION['_tracy']['bluescreen'][$_SERVER['HTTP_X_TRACY_AJAX']] = [
 				'content' => Helpers::capture(function () use ($exception) {
