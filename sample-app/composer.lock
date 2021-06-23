@@ -1394,7 +1394,7 @@
             "dist": {
                 "type": "path",
                 "url": "../remote-tracy",
-                "reference": "b957706711653b5e3b43d78bc282f379da540878"
+                "reference": "acc9dde4d712f06ccdf1fd1f7b3e4153709cde83"
             },
             "require": {
                 "ext-json": "*",
@@ -1413,6 +1413,9 @@
                 "phpstan/phpstan": "^0.12",
                 "psr/log": "^1.0"
             },
+            "bin": [
+                "bin/remote-tracy-server"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {

@@ -1,1 +1,4 @@
 parameters:
+
+tracy:
+	remoteServerUrl: 'http://devel79vps:7979'

@@ -35,6 +35,7 @@
 		"classmap": ["src"],
 		"files": ["src/Tracy/functions.php"]
 	},
+	"bin": ["bin/remote-tracy-server"],
 	"minimum-stability": "dev",
 	"scripts": {
 		"phpstan": "phpstan analyse",

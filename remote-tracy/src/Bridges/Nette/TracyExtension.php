@@ -54,6 +54,7 @@ class TracyExtension extends Nette\DI\CompilerExtension
 			'blueScreen' => Expect::listOf('callable'),
 			'editorMapping' => Expect::arrayOf('string')->dynamic()->default(null),
 			'netteMailer' => Expect::bool(true),
+			'remoteServerUrl' => Expect::string()->dynamic(),
 		]);
 	}
 
@@ -129,7 +130,7 @@ class TracyExtension extends Nette\DI\CompilerExtension
 				));
 			}
 
-			if (!$this->cliMode && ($name = $builder->getByType(Nette\Http\Session::class))) {
+			if ($options['remoteServerUrl'] === NULL && !$this->cliMode && ($name = $builder->getByType(Nette\Http\Session::class))) {
 				$initialize->addBody('$this->getService(?)->start();', [$name]);
 				$initialize->addBody('Tracy\Debugger::dispatch();');
 			}
