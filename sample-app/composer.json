@@ -26,10 +26,10 @@
 		"nette/http": "^3.1",
 		"nette/mail": "^3.1",
 		"nette/robot-loader": "^3.3",
-		"nette/safe-stream": "^2.4",
+		"nette/safe-stream": "^2.5",
 		"nette/security": "^3.1",
 		"nette/utils": "^3.2",
-		"latte/latte": "^2.9",
+		"latte/latte": "^2.11",
 		"tracy/tracy": "@dev"
 	},
 	"require-dev": {
