@@ -2,109 +2,17 @@
 <head>
 	<title>Tracy - Remote bar</title>
 	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const url = ''; // @todo
-			const bars = document.querySelector('#bars');
-
-			let lastId = 0;
-
-			const checkNewBar = () => {
-				fetch(url + '/api/').then((response) => {
-					if (response.ok) {
-						return response.text();
-					}
-
-					return Promise.reject(response);
-				}).then((data) => {
-					processLastId(parseInt(data.toString(), 10));
-				}).catch(() => {
-					processLastId(0);
-				});
-			};
-
-			const processLastId = (id) => {
-				if (id > lastId) {
-					for (var i = lastId + 1; i <= id; i++) {
-						addNewBar(i);
-					}
-				}
-				setTimeout(() => checkNewBar(), 1000);
-			};
-
-			const addNewBar = (id) => {
-				const iframe = document.createElement('iframe');
-				iframe.setAttribute('src', url + '/api/?id=' + id);
-
-				bars.prepend(iframe);
-
-				lastId = id;
-			};
-
-			checkNewBar();
-
-			// --- //
-
-			document.getElementById('clear').addEventListener('click', () => {
-				if (!confirm('Really?')) {
-					return;
-				}
-
-				fetch(url + '/api/', {
-					method: 'DELETE',
-				}).then((response) => {
-					if (response.ok) {
-						lastId = 0;
-						bars.innerHTML = '';
-					}
-				});
-			});
-
-			// --- //
-
-			document.addEventListener('mousemove', (event) => {
-				if (event.target.tagName === 'IFRAME') {
-					document.querySelectorAll('iframe').forEach((el) => {
-						if (el === event.target) {
-							el.classList.add('big');
-						} else {
-							el.classList.remove('big');
-						}
-					});
-				}
-			});
-		});
+		const url = '';
+		const onSuccess = () => {
+			document.getElementById('clear').textContent = 'Clear';
+		};
+		const onError = () => {
+			document.getElementById('clear').textContent = 'Server is not running. Please start it...';
+		};
+		<?php require __DIR__ . '/../../../../chrome-dev-panel/js/remote-tracy.js'; ?>
 	</script>
 	<style>
-		iframe {
-			box-sizing: border-box;
-			width: 100%;
-			height: 35px;
-			border: 1px solid #c9c9c9;
-			border-bottom: none;
-			padding: 5px 5px 5px 50px;
-			background-color: #edeae0;
-		}
-
-		iframe:last-child {
-			border-bottom: 1px solid #c9c9c9;
-		}
-
-		iframe.big {
-			height: 60%;
-		}
-
-		button {
-			background-color: #cd1818;
-			border: none;
-			color: white;
-			width: 100%;
-			padding: 15px 32px;
-			text-align: center;
-			text-decoration: none;
-			display: block;
-			font-size: 16px;
-			margin-bottom: 15px;
-		}
+		<?php require __DIR__ . '/../../../../chrome-dev-panel/css/remote-tracy.css'; ?>
 	</style>
 </head>
 <body>
