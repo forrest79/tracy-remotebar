@@ -19,6 +19,8 @@ namespace Tracy;
 	<li><span title="Previous request before redirect">redirect</span></li>
 <?php endif; if ($type === 'ajax'): ?>
 	<li>AJAX</li>
+<?php endif; if ($type === 'cli'): ?>
+	<li>CLI</li>
 <?php endif ?>
 
 <?php foreach ($panels as $panel): if ($panel->tab) { ?>

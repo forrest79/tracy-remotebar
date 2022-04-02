@@ -8,6 +8,18 @@
 [![License](https://img.shields.io/badge/license-New%20BSD-blue.svg)](https://github.com/nette/tracy/blob/master/license.md)
 
 
+Remote bars
+-----------
+
+To use rendering bars to remote server:
+1. run server - use internal PHP HTTP server `php -S 0.0.0.0:7979 -t src/Remote/public` or create virtual host in your favorite web server (nginx/Apache) pointed to `src/Remote/public` and with PHP support
+2. set server URL in your application via `Tracy\Debugger::$remoteServerUrl` or in extension:
+```
+tracy:
+    remoteServerUrl: 'http://127.0.0.1:7979'
+```
+3. to see remote rendered bars open `remoteServerUrl` in your browser or use Chrome Dev extension (load unpacked extension `chrome-dev-panel` to Chrome - switch extensions to developer mode - you can set custom server URL in extension options)
+
 Introduction
 ------------
 

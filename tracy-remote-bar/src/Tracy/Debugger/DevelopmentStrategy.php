@@ -42,6 +42,11 @@ final class DevelopmentStrategy
 
 	public function handleException(\Throwable $exception, bool $firstTime): void
 	{
+		if (Debugger::isRemoteActive() && Debugger::isHttpAjax()) {
+			$this->blueScreen->remoteRender($exception);
+			return;
+		}
+
 		if (Helpers::isAjax() && $this->defer->isAvailable()) {
 			$this->blueScreen->renderToAjax($exception, $this->defer);
 

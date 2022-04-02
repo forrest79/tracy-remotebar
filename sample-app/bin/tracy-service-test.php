@@ -8,5 +8,6 @@ $container = App\Bootstrap::boot()->createContainer();
 while (TRUE) {
 	echo date('H:i:s') . PHP_EOL;
 	bdump('Cli service request ' . date('H:i:s'));
+	Tracy\Debugger::dispatchBars();
 	sleep(2);
 }

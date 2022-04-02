@@ -72,6 +72,29 @@ class Bar
 	 */
 	public function render(DeferredContent $defer): void
 	{
+		if (Debugger::isRemoteActive()) {
+			if (Debugger::isHttpAjax()) {
+				$type = 'ajax';
+			} elseif (PHP_SAPI === 'cli') {
+				$type = 'cli';
+			} elseif (Helpers::isRedirect()) {
+				$type = 'redirect';
+			} else {
+				$type = 'global'; // not used main - just to disable close button :-)
+			}
+
+			$content = $this->renderPartial($type);
+
+			$content = '<div id=tracy-debug-bar>' . $content['bar'] . '</div>' . $content['panels'];
+
+			$requestId = $defer->getRequestId();
+			$nonce = Helpers::getNonce();
+			$async = false;
+			require __DIR__ . '/assets/loader.phtml';
+
+			return;
+		}
+
 		$redirectQueue = &$defer->getItems('redirect');
 		$requestId = $defer->getRequestId();
 

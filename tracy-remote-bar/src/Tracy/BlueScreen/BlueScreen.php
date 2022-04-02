@@ -562,4 +562,13 @@ class BlueScreen
 
 		return $res . "class $class\n{\n\$END\$\n}\n";
 	}
+
+	/** REMOTE */
+
+	public function remoteRender(\Throwable $exception): void
+	{
+		Debugger::remoteAdd(Helpers::capture(function () use ($exception) {
+			$this->renderTemplate($exception, __DIR__ . '/assets/page.phtml', false);
+		}));
+	}
 }

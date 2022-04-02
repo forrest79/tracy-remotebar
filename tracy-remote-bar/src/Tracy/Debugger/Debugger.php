@@ -293,6 +293,17 @@ class Debugger
 
 		self::$reserved = null;
 
+		if (self::isRemoteActive()) {
+			try {
+				self::remoteAdd(Helpers::capture(function (): void {
+					self::getStrategy()->renderBar();
+				}));
+			} catch (\Throwable $e) {
+				self::exceptionHandler($e);
+			}
+			return;
+		}
+
 		if (self::$showBar && !Helpers::isCli()) {
 			try {
 				self::getStrategy()->renderBar();
@@ -646,5 +657,67 @@ class Debugger
 		}
 
 		return in_array($addr, $list, true) || in_array("$secret@$addr", $list, true);
+	}
+
+	/** REMOTE */
+
+	public static ?string $remoteServerUrl = null;
+
+
+	public static function isRemoteActive(): bool
+	{
+		return self::$remoteServerUrl !== null;
+	}
+
+
+	public static function remoteAdd(string $html): void
+	{
+		if (!self::isRemoteActive()) {
+			return;
+		}
+
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_URL, rtrim(self::$remoteServerUrl, '/') . '/api/');
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $html);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			'Content-Type: text/plain',
+			'Content-Length: ' . strlen($html),
+		]);
+
+		curl_exec($ch); // intentionally ignore errors - server should not be started
+	}
+
+
+	public static function remoteAssetsUrl(): ?string
+	{
+		if (self::isRemoteActive()) {
+			return '/tracy-assets/';
+		}
+
+		return null;
+	}
+
+
+	public static function dispatchBars(): void
+	{
+		if (self::isRemoteActive() && !self::$productionMode) {
+			self::removeOutputBuffers(false);
+			try {
+				self::remoteAdd(Helpers::capture(function (): void {
+					self::getStrategy()->renderBar();
+				}));
+			} catch (\Throwable $e) {
+				self::exceptionHandler($e);
+			}
+		}
+	}
+
+
+	public static function isHttpAjax(): bool
+	{
+		return ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest';
 	}
 }
