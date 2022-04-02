@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75036dfcdbbf1592487e726943bc8154",
+    "content-hash": "ea85c23fe9757d0c2a1fd06a4cf31d1d",
     "packages": [
         {
             "name": "latte/latte",
@@ -1239,11 +1239,17 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "dev-master",
+            "version": "dev-remote-bars-v2.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/forrest79/tracy.git",
+                "reference": "46aa86532b06d25e538e9fd1cb53b9518c54c0fa"
+            },
             "dist": {
-                "type": "path",
-                "url": "../tracy-remote-bar",
-                "reference": "eff56b71be1d5e2c07edb40f1db1e11c5f2f3fbd"
+                "type": "zip",
+                "url": "https://api.github.com/repos/forrest79/tracy/zipball/46aa86532b06d25e538e9fd1cb53b9518c54c0fa",
+                "reference": "46aa86532b06d25e538e9fd1cb53b9518c54c0fa",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -1306,10 +1312,10 @@
                 "profiler",
                 "xdebug"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/forrest79/tracy/tree/remote-bars-v2.9.1"
+            },
+            "time": "2022-04-02T12:38:42+00:00"
         }
     ],
     "packages-dev": [
@@ -1390,16 +1396,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.5.2",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "f32e95f571c9587b4e14be05253ae56fedd00b2c"
+                "reference": "39953ac1452a8843702ee41a35b4861d3e8207a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f32e95f571c9587b4e14be05253ae56fedd00b2c",
-                "reference": "f32e95f571c9587b4e14be05253ae56fedd00b2c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/39953ac1452a8843702ee41a35b4861d3e8207a7",
+                "reference": "39953ac1452a8843702ee41a35b4861d3e8207a7",
                 "shasum": ""
             },
             "require": {
@@ -1425,7 +1431,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.5.2"
+                "source": "https://github.com/phpstan/phpstan/tree/1.5.3"
             },
             "funding": [
                 {
@@ -1445,7 +1451,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-29T07:34:36+00:00"
+            "time": "2022-03-30T21:55:08+00:00"
         },
         {
             "name": "phpstan/phpstan-nette",
@@ -1512,7 +1518,14 @@
             "time": "2021-09-20T16:12:57+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "tracy/tracy",
+            "version": "dev-remote-bars-v2.9.1",
+            "alias": "2.9.1",
+            "alias_normalized": "2.9.1.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "tracy/tracy": 20
