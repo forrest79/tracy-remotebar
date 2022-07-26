@@ -15,7 +15,7 @@
 		"nette/security": "^3.1",
 		"nette/utils": "^3.2",
 		"latte/latte": "^2.11",
-		"tracy/tracy": "dev-remote-bars-v2.9.3 as 2.9.3"
+		"tracy/tracy": "dev-remote-bars-v2.9.4 as 2.9.4"
 	},
 	"require-dev": {
 		"nette/tester": "^2.4",
