@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "13bc8822e972c2ac059c0787d84bb0a9",
+    "content-hash": "d2caa17d77b1941a68355c1ec2e9a3c7",
     "packages": [
         {
             "name": "latte/latte",
@@ -1238,16 +1238,16 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "dev-remote-bars-v2.9.6",
+            "version": "dev-remote-bars-v2.9.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/forrest79/tracy.git",
-                "reference": "61341ffcfe81fc051dcf17516b3828646b24de79"
+                "reference": "deceeea5000e5e3e0c93de67448394c1bded80ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/forrest79/tracy/zipball/61341ffcfe81fc051dcf17516b3828646b24de79",
-                "reference": "61341ffcfe81fc051dcf17516b3828646b24de79",
+                "url": "https://api.github.com/repos/forrest79/tracy/zipball/deceeea5000e5e3e0c93de67448394c1bded80ce",
+                "reference": "deceeea5000e5e3e0c93de67448394c1bded80ce",
                 "shasum": ""
             },
             "require": {
@@ -1312,9 +1312,9 @@
                 "xdebug"
             ],
             "support": {
-                "source": "https://github.com/forrest79/tracy/tree/remote-bars-v2.9.6"
+                "source": "https://github.com/forrest79/tracy/tree/remote-bars-v2.9.7"
             },
-            "time": "2023-02-06T20:02:28+00:00"
+            "time": "2023-02-28T20:57:10+00:00"
         }
     ],
     "packages-dev": [
@@ -1395,16 +1395,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.9.14",
+            "version": "1.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58"
+                "reference": "5419375b5891add97dc74be71e6c1c34baaddf64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e5fcc96289cf737304286a9b505fbed091f02e58",
-                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5419375b5891add97dc74be71e6c1c34baaddf64",
+                "reference": "5419375b5891add97dc74be71e6c1c34baaddf64",
                 "shasum": ""
             },
             "require": {
@@ -1434,7 +1434,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.9.14"
+                "source": "https://github.com/phpstan/phpstan/tree/1.10.3"
             },
             "funding": [
                 {
@@ -1450,25 +1450,25 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-19T10:47:09+00:00"
+            "time": "2023-02-25T14:47:13+00:00"
         },
         {
             "name": "phpstan/phpstan-nette",
-            "version": "1.2.3",
+            "version": "1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-nette.git",
-                "reference": "b1e6ae1f391ce0098a2c95f3a0f67aca5ef70e1f"
+                "reference": "9e083bb5befde7b73f9a12fc5bd223a7dcd63920"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-nette/zipball/b1e6ae1f391ce0098a2c95f3a0f67aca5ef70e1f",
-                "reference": "b1e6ae1f391ce0098a2c95f3a0f67aca5ef70e1f",
+                "url": "https://api.github.com/repos/phpstan/phpstan-nette/zipball/9e083bb5befde7b73f9a12fc5bd223a7dcd63920",
+                "reference": "9e083bb5befde7b73f9a12fc5bd223a7dcd63920",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.9.4"
+                "phpstan/phpstan": "^1.10"
             },
             "conflict": {
                 "nette/application": "<2.3.0",
@@ -1509,17 +1509,17 @@
             "description": "Nette Framework class reflection extension for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-nette/issues",
-                "source": "https://github.com/phpstan/phpstan-nette/tree/1.2.3"
+                "source": "https://github.com/phpstan/phpstan-nette/tree/1.2.4"
             },
-            "time": "2023-01-25T22:05:36+00:00"
+            "time": "2023-02-18T13:39:23+00:00"
         }
     ],
     "aliases": [
         {
             "package": "tracy/tracy",
-            "version": "dev-remote-bars-v2.9.6",
-            "alias": "2.9.6",
-            "alias_normalized": "2.9.6.0"
+            "version": "dev-remote-bars-v2.9.7",
+            "alias": "2.9.7",
+            "alias_normalized": "2.9.7.0"
         }
     ],
     "minimum-stability": "stable",
