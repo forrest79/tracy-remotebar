@@ -6,19 +6,18 @@
 		"nette/application": "^3.1",
 		"nette/bootstrap": "^3.1",
 		"nette/caching": "^3.1",
-		"nette/di": "^3.0",
-		"nette/finder": "^2.5",
+		"nette/di": "^3.1",
 		"nette/forms": "^3.1",
 		"nette/http": "^3.1",
-		"nette/robot-loader": "^3.4",
-		"nette/safe-stream": "^2.5",
+		"nette/robot-loader": "^4.0",
+		"nette/safe-stream": "^3.0",
 		"nette/security": "^3.1",
-		"nette/utils": "^3.2",
-		"latte/latte": "^2.11",
-		"tracy/tracy": "dev-remote-bars-v2.9.7 as 2.9.7"
+		"nette/utils": "^4.0",
+		"latte/latte": "^3.0",
+		"tracy/tracy": "dev-remote-bars-v2.10.2 as 2.10.2"
 	},
 	"require-dev": {
-		"nette/tester": "^2.4",
+		"nette/tester": "^2.5",
 		"phpstan/phpstan-nette": "^1.0"
 	},
 	"autoload": {
