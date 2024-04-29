@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2bb86e2e0906cd38448ab5e90ebf3fa3",
+    "content-hash": "8afde1876902ef037d0593173e9b2443",
     "packages": [
         {
             "name": "latte/latte",
-            "version": "v3.0.14",
+            "version": "v3.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/latte.git",
-                "reference": "1ab054b1af13ee647ccbc5bf2673a3483a7457d5"
+                "reference": "71a56a622c70c47671581154db24dc223fc88444"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/latte/zipball/1ab054b1af13ee647ccbc5bf2673a3483a7457d5",
-                "reference": "1ab054b1af13ee647ccbc5bf2673a3483a7457d5",
+                "url": "https://api.github.com/repos/nette/latte/zipball/71a56a622c70c47671581154db24dc223fc88444",
+                "reference": "71a56a622c70c47671581154db24dc223fc88444",
                 "shasum": ""
             },
             "require": {
@@ -87,22 +87,22 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/latte/issues",
-                "source": "https://github.com/nette/latte/tree/v3.0.14"
+                "source": "https://github.com/nette/latte/tree/v3.0.15"
             },
-            "time": "2024-03-19T09:03:26+00:00"
+            "time": "2024-04-29T20:27:46+00:00"
         },
         {
             "name": "nette/application",
-            "version": "v3.2.1",
+            "version": "v3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/application.git",
-                "reference": "bb59a51bc36b7561a6e44d1f014e0e3d68e23dc2"
+                "reference": "0af99e2fe9fcab0ed598da9f03992b936375d071"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/application/zipball/bb59a51bc36b7561a6e44d1f014e0e3d68e23dc2",
-                "reference": "bb59a51bc36b7561a6e44d1f014e0e3d68e23dc2",
+                "url": "https://api.github.com/repos/nette/application/zipball/0af99e2fe9fcab0ed598da9f03992b936375d071",
+                "reference": "0af99e2fe9fcab0ed598da9f03992b936375d071",
                 "shasum": ""
             },
             "require": {
@@ -179,22 +179,22 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/application/issues",
-                "source": "https://github.com/nette/application/tree/v3.2.1"
+                "source": "https://github.com/nette/application/tree/v3.2.3"
             },
-            "time": "2024-03-11T19:57:03+00:00"
+            "time": "2024-04-20T00:45:39+00:00"
         },
         {
             "name": "nette/bootstrap",
-            "version": "v3.2.2",
+            "version": "v3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/bootstrap.git",
-                "reference": "226e2df81b25207e382de3e89315eb17f4fe24a7"
+                "reference": "5f8b9420b0b5441b55f0745dd0e8afa1653e5e6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/bootstrap/zipball/226e2df81b25207e382de3e89315eb17f4fe24a7",
-                "reference": "226e2df81b25207e382de3e89315eb17f4fe24a7",
+                "url": "https://api.github.com/repos/nette/bootstrap/zipball/5f8b9420b0b5441b55f0745dd0e8afa1653e5e6c",
+                "reference": "5f8b9420b0b5441b55f0745dd0e8afa1653e5e6c",
                 "shasum": ""
             },
             "require": {
@@ -260,9 +260,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/bootstrap/issues",
-                "source": "https://github.com/nette/bootstrap/tree/v3.2.2"
+                "source": "https://github.com/nette/bootstrap/tree/v3.2.3"
             },
-            "time": "2024-03-10T22:15:04+00:00"
+            "time": "2024-04-19T00:07:13+00:00"
         },
         {
             "name": "nette/caching",
@@ -1183,16 +1183,16 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "dev-remote-bars-v2.10.6",
+            "version": "dev-remote-bars-v2.10.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/forrest79/tracy.git",
-                "reference": "e7285023b7c05d1226f502fbcb3c361c2a61b952"
+                "reference": "7eb3c9c80fe93155f024984e1c4c17966bbfb279"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/forrest79/tracy/zipball/e7285023b7c05d1226f502fbcb3c361c2a61b952",
-                "reference": "e7285023b7c05d1226f502fbcb3c361c2a61b952",
+                "url": "https://api.github.com/repos/forrest79/tracy/zipball/7eb3c9c80fe93155f024984e1c4c17966bbfb279",
+                "reference": "7eb3c9c80fe93155f024984e1c4c17966bbfb279",
                 "shasum": ""
             },
             "require": {
@@ -1258,9 +1258,9 @@
                 "xdebug"
             ],
             "support": {
-                "source": "https://github.com/forrest79/tracy/tree/remote-bars-v2.10.6"
+                "source": "https://github.com/forrest79/tracy/tree/remote-bars-v2.10.7"
             },
-            "time": "2024-04-08T21:28:28+00:00"
+            "time": "2024-04-29T19:58:49+00:00"
         }
     ],
     "packages-dev": [
@@ -1341,16 +1341,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.66",
+            "version": "1.10.67",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd"
+                "reference": "16ddbe776f10da6a95ebd25de7c1dbed397dc493"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/94779c987e4ebd620025d9e5fdd23323903950bd",
-                "reference": "94779c987e4ebd620025d9e5fdd23323903950bd",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/16ddbe776f10da6a95ebd25de7c1dbed397dc493",
+                "reference": "16ddbe776f10da6a95ebd25de7c1dbed397dc493",
                 "shasum": ""
             },
             "require": {
@@ -1393,13 +1393,9 @@
                 {
                     "url": "https://github.com/phpstan",
                     "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
-                    "type": "tidelift"
                 }
             ],
-            "time": "2024-03-28T16:17:31+00:00"
+            "time": "2024-04-16T07:22:02+00:00"
         },
         {
             "name": "phpstan/phpstan-nette",
@@ -1467,9 +1463,9 @@
     "aliases": [
         {
             "package": "tracy/tracy",
-            "version": "dev-remote-bars-v2.10.6",
-            "alias": "2.10.6",
-            "alias_normalized": "2.10.6.0"
+            "version": "dev-remote-bars-v2.10.7",
+            "alias": "2.10.7",
+            "alias_normalized": "2.10.7.0"
         }
     ],
     "minimum-stability": "stable",
