@@ -1,0 +1,49 @@
+div#header {
+	border-bottom: 3px solid #000;
+	position: relative;
+	height: 60px;
+}
+
+button#clear {
+	width: auto;
+	display: inline-block;
+	position: absolute;
+	left: 5px;
+	top: 5px;
+	z-index: 2;
+}
+
+div#serverUrl {
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 5px;
+	line-height: 50px;
+}
+
+div#serverUrl.ok {
+	color: #1a7e1e;
+}
+
+div#serverUrl.error {
+	color: #d51616;
+}
+
+button#options {
+	background-color: #1212e3;
+	border: none;
+	color: white;
+	cursor: pointer;
+	padding: 15px;
+	text-align: center;
+	text-decoration: none;
+	margin-bottom: 15px;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	z-index: 2;
+}

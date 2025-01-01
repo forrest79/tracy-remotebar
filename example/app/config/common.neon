@@ -1,0 +1,19 @@
+parameters:
+	remoteServerUrl: 'http://127.0.0.1:7979'
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+extensions:
+	tracyRemoteBar: Forrest79\TracyRemoteDevelopmentStrategy\Bridges\Nette\TracyRemoteDevelopmentStrategyExtension
+
+session:
+	expiration: 14 days
+
+services:
+	- App\Router\RouterFactory::createRouter
+
+tracyRemoteBar:
+	serverUrl: %remoteServerUrl%
