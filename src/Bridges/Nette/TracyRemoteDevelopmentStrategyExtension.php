@@ -12,20 +12,25 @@ class TracyRemoteDevelopmentStrategyExtension extends Nette\DI\CompilerExtension
 	public function getConfigSchema(): Nette\Schema\Schema
 	{
 		return Expect::structure([
-			'serverUrl' => Expect::string()->required()->dynamic(),
+			'serverUrl' => Expect::string()->dynamic(),
 		]);
 	}
 
 
 	public function afterCompile(Nette\PhpGenerator\ClassType $class): void
 	{
-		$body = $class->getMethod('initialize')->getBody();
-		$body = preg_replace('#// tracy\.\n\(function \(\) {?.+}\)\(\);\n#ms', '', $body);
-		assert($body !== NULL);
-		$class->getMethod('initialize')->setBody($body);
-
 		$config = (array) $this->config;
-		$this->initialization->addBody(TracyRemoteDevelopmentStrategy\RemoteBar::class . '::setServerUrl(?);', [$config['serverUrl']]);
+		$serverUrl = $config['serverUrl'];
+		assert($serverUrl === NULL || is_string($serverUrl));
+
+		if ($serverUrl !== NULL) {
+			$body = $class->getMethod('initialize')->getBody();
+			$body = preg_replace('#// tracy\.\n\(function \(\) {?.+}\)\(\);\n#ms', '', $body);
+			assert($body !== NULL);
+			$class->getMethod('initialize')->setBody($body);
+
+			$this->initialization->addBody(TracyRemoteDevelopmentStrategy\RemoteBar::class . '::setServerUrl(?);', [$serverUrl]);
+		}
 	}
 
 }
