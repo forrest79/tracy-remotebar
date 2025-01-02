@@ -2,6 +2,8 @@
 
 namespace Forrest79\TracyRemoteDevelopmentStrategy\Client;
 
+use Forrest79\TracyRemoteDevelopmentStrategy\Helper;
+
 class BarData
 {
 	private const DATA_FILE = 'bars.json';
@@ -92,12 +94,7 @@ class BarData
 	private static function dir(): string
 	{
 		if (self::$dir === NULL) {
-			$dir = sys_get_temp_dir() . '/tracy-remotebar/data';
-			if (!is_dir($dir) && !mkdir($dir, recursive: TRUE) && !is_dir($dir)) {
-				throw new \RuntimeException(sprintf('Directory "%s" was not created.', $dir));
-			}
-
-			self::$dir = $dir;
+			self::$dir = Helper::createTempDir('tracy-remotebar/data');
 		}
 
 		return self::$dir;

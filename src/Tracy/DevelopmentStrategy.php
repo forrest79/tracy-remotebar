@@ -2,12 +2,13 @@
 
 namespace Forrest79\TracyRemoteDevelopmentStrategy\Tracy;
 
+use Forrest79\TracyRemoteDevelopmentStrategy\Helper;
 use Forrest79\TracyRemoteDevelopmentStrategy\RemoteBar;
 use Tracy;
 use Tracy\DeferredContent;
 use Tracy\Helpers;
 
-final class DevelopmentStrategy extends Tracy\DevelopmentStrategy
+class DevelopmentStrategy extends Tracy\DevelopmentStrategy
 {
 	private Tracy\Bar $bar;
 
@@ -30,7 +31,7 @@ final class DevelopmentStrategy extends Tracy\DevelopmentStrategy
 		if (RemoteBar::isRemoteActive() && RemoteBar::isHttpAjax()) {
 			RemoteBar::add(Helpers::capture(function () use ($exception): void {
 				(function () use ($exception): void {
-					$this->renderTemplate($exception, RemoteBar::classDir(Tracy\BlueScreen::class) . '/assets/page.phtml', FALSE);
+					$this->renderTemplate($exception, Helper::classDir(Tracy\BlueScreen::class) . '/assets/page.phtml', FALSE);
 				})->call($this->blueScreen);
 			}));
 			return;
@@ -67,7 +68,7 @@ final class DevelopmentStrategy extends Tracy\DevelopmentStrategy
 				$nonceAttr = Helpers::getNonceAttr();
 				$async = FALSE;
 
-				require RemoteBar::classDir(Tracy\Bar::class) . '/assets/loader.phtml';
+				require Helper::classDir(Tracy\Bar::class) . '/assets/loader.phtml';
 			}));
 
 			return;
