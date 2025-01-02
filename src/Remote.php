@@ -3,7 +3,6 @@
 namespace Forrest79\TracyRemoteBar;
 
 use Tracy\Debugger;
-use Tracy\Helpers;
 
 class Remote
 {
@@ -62,9 +61,7 @@ class Remote
 		if (self::isActive() && !(bool) Debugger::$productionMode) {
 			Debugger::removeOutputBuffers(FALSE);
 			try {
-				self::addBar(Helpers::capture(static function (): void {
-					Debugger::getStrategy()->renderBar();
-				}));
+				Debugger::getStrategy()->renderBar();
 			} catch (\Throwable $e) {
 				Debugger::exceptionHandler($e);
 			}
