@@ -89,3 +89,8 @@ ignoreErrors:
 		count: 1
 		path: src/Tracy/DevelopmentStrategy.php
 
+	-
+		sniff: Generic.PHP.ForbiddenFunctions.Found
+		message: 'The use of function bdump() is forbidden'
+		count: 1
+		path: tests/test-cli-request.php

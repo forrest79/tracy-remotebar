@@ -38,7 +38,7 @@
 		}
 	},
 	"scripts": {
-		"tests": "tests/run-tests tests",
+		"tests": "tests/run-tests.php",
 		"phpcs": "vendor/bin/phpcs --bootstrap=vendor/forrest79/phpcs-ignores/src/bootstrap-outdated.php --extensions=php --ignore=vendor/*,temp/* -s src tests example",
 		"phpstan": "vendor/bin/phpstan analyse src tests example"
 	},

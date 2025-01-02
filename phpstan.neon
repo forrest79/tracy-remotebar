@@ -5,10 +5,10 @@ parameters:
 	level: max
 
 	excludePaths:
-		- src/Tracy/DevelopmentStrategy.php # because of extending final class
-		- example/app/logs
 		- example/app/temp
 		- example/app/vendor
+		- src/Tracy/DevelopmentStrategy.php # because of extending final class
+		- tests/temp
 
 	ignoreErrors:
 		-
