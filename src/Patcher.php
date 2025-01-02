@@ -2,306 +2,126 @@
 
 namespace Forrest79\TracyRemoteDevelopmentStrategy;
 
-/**
- * @inspiration bypassFinals() from Nette\Tester (https://tester.nette.org/en/)
- */
+use Composer;
+
 final class Patcher
 {
-	private const PROTOCOL = 'file';
-
-	/** @var resource|NULL */
-	public $context;
-
-	/** @var resource|NULL */
-	private $handle;
-
-	/** @var array<callable(string $path, string $code): string> */
-	private static array $injections = [];
+	private const MIN_TRACY_VERSION = '2.10.9';
 
 
-	public static function register(): void
+	public static function patch(): void
 	{
-		self::setInjections([static function (string $path, string $code): string {
-			if (str_ends_with($path, 'vendor/tracy/tracy/src/Tracy/Debugger/Debugger.php')) {
-				$search1 = 'if (self::$showBar && !Helpers::isCli())';
+		$dir = sys_get_temp_dir() . '/tracy-remotebar/patched';
+		if (!is_dir($dir) && !mkdir($dir, recursive: TRUE) && !is_dir($dir)) {
+			throw new \RuntimeException(sprintf('Directory "%s" was not created.', $dir));
+		}
 
-				// can't find where to put patch (new Tracy version?)
-				if (!str_contains($code, $search1)) {
-					// throw an exception?
-					return $code;
-				}
+		$appDir = __DIR__ . '/../../../..';
+		$composerLockMTime = self::composerLockMTime($appDir);
+		if ($composerLockMTime === NULL) {
+			$appDir = Helper::classDir(Composer\Autoload\ClassLoader::class) . '/../..';
+			$composerLockMTime = self::composerLockMTime($appDir);
+			if ($composerLockMTime === NULL) {
+				throw new \RuntimeException('Can\'t detect composer lock file.');
+			}
+		}
 
-				$injectCode1 = 'if (self::$showBar && (!Helpers::isCli() || \Forrest79\TracyRemoteDevelopmentStrategy\RemoteBar::isRemoteActive()))';
-
-				$code = str_replace($search1, $injectCode1, $code);
-
-				// ---
-
-				$search2 = 'new DevelopmentStrategy(';
-
-				// can't find where to put patch (new Tracy version?)
-				if (!str_contains($code, $search2)) {
-					// throw an exception?
-					return $code;
-				}
-
-				$injectCode2 = 'new \Forrest79\TracyRemoteDevelopmentStrategy\Tracy\DevelopmentStrategy(';
-
-				return str_replace($search2, $injectCode2, $code);
-			} else if (str_ends_with($path, 'vendor/tracy/tracy/src/Tracy/Debugger/DevelopmentStrategy.php')) {
-				$search = 'final class DevelopmentStrategy';
-
-				// can't find where to put patch (new Tracy version?)
-				if (!str_contains($code, $search)) {
-					// throw an exception?
-					return $code;
-				}
-
-				$injectCode = 'class DevelopmentStrategy';
-
-				return str_replace($search, $injectCode, $code);
+		$dir = Helper::createTempDir('tracy-remotebar/patched/' . $composerLockMTime);
+		$patchedDebuggerFile = $dir . '/Debugger.php';
+		$patchedDevelopmentStrategyFile =  $dir . '/DevelopmentStrategy.php';
+		if (!is_file($patchedDebuggerFile) || !is_file($patchedDevelopmentStrategyFile)) {
+			$tracyVersion = self::detectTracyVersion($appDir);
+			if (version_compare($tracyVersion, self::MIN_TRACY_VERSION, '<')) {
+				throw new \RuntimeException(sprintf('Tracy minimal version is \'%s\', your version is \'%s\'.', self::MIN_TRACY_VERSION, $tracyVersion));
 			}
 
-			return $code;
-		}]);
-	}
-
-
-	/**
-	 * @param array<callable(string $path, string $code): string> $injections
-	 */
-	private static function setInjections(array $injections): void
-	{
-		self::$injections = $injections;
-		stream_wrapper_unregister(self::PROTOCOL);
-		stream_wrapper_register(self::PROTOCOL, self::class);
-	}
-
-
-	public function dir_closedir(): void
-	{
-		closedir($this->handle);
-	}
-
-
-	public function dir_opendir(string $path, int $options): bool
-	{
-		$this->handle = $this->context !== NULL
-			? $this->native('opendir', $path, $this->context)
-			: $this->native('opendir', $path);
-
-		return (bool) $this->handle;
-	}
-
-
-	/**
-	 * @return string|FALSE
-	 */
-	public function dir_readdir()
-	{
-		return readdir($this->handle);
-	}
-
-
-	public function dir_rewinddir(): bool
-	{
-		return (bool) rewinddir($this->handle);
-	}
-
-
-	public function mkdir(string $path, int $mode, int $options): bool
-	{
-		$recursive = (bool) ($options & STREAM_MKDIR_RECURSIVE);
-
-		return $this->context !== NULL
-			? $this->native('mkdir', $path, $mode, $recursive, $this->context)
-			: $this->native('mkdir', $path, $mode, $recursive);
-	}
-
-
-	public function rename(string $pathFrom, string $pathTo): bool
-	{
-		return $this->context !== NULL
-			? $this->native('rename', $pathFrom, $pathTo, $this->context)
-			: $this->native('rename', $pathFrom, $pathTo);
-	}
-
-
-	public function rmdir(string $path, int $options): bool
-	{
-		return $this->context !== NULL
-			? $this->native('rmdir', $path, $this->context)
-			: $this->native('rmdir', $path);
-	}
-
-
-	/**
-	 * @return resource|NULL
-	 */
-	public function stream_cast(int $castAs)
-	{
-		return $this->handle;
-	}
-
-
-	public function stream_close(): void
-	{
-		fclose($this->handle);
-	}
-
-
-	public function stream_eof(): bool
-	{
-		return feof($this->handle);
-	}
-
-
-	public function stream_flush(): bool
-	{
-		return fflush($this->handle);
-	}
-
-
-	/**
-	 * @param int<0, 7> $operation
-	 */
-	public function stream_lock(int $operation): bool
-	{
-		return $operation > 0
-			? flock($this->handle, $operation)
-			: TRUE;
-	}
-
-
-	/**
-	 * @param mixed $value
-	 */
-	public function stream_metadata(string $path, int $option, $value): bool
-	{
-		switch ($option) {
-			case STREAM_META_TOUCH:
-				return $this->native('touch', $path, $value[0] ?? time(), $value[1] ?? time());
-			case STREAM_META_OWNER_NAME:
-			case STREAM_META_OWNER:
-				return $this->native('chown', $path, $value);
-			case STREAM_META_GROUP_NAME:
-			case STREAM_META_GROUP:
-				return $this->native('chgrp', $path, $value);
-			case STREAM_META_ACCESS:
-				return $this->native('chmod', $path, $value);
+			self::patchDebuggerPhp($appDir, $patchedDebuggerFile);
+			self::patchDevelopmentStrategyPhp($appDir, $patchedDevelopmentStrategyFile);
 		}
 
-		return FALSE;
+		require $patchedDebuggerFile;
+		require $patchedDevelopmentStrategyFile;
 	}
 
 
-	public function stream_open(string $path, string $mode, int $options, string|NULL &$openedPath): bool
+	private static function patchDebuggerPhp(string $appDir, string $patchedFile): void
 	{
-		$usePath = (bool) ($options & STREAM_USE_PATH);
-		if (($mode === 'rb') && (pathinfo($path, PATHINFO_EXTENSION) === 'php')) {
-			$content = $this->native('file_get_contents', $path, $usePath, $this->context);
-			if ($content === FALSE) {
-				return FALSE;
-			} else {
-				foreach (self::$injections as $injection) {
-					$content = $injection($path, $content);
-				}
+		$patchedDebuggerCode = file_get_contents($appDir . '/vendor/tracy/tracy/src/Tracy/Debugger/Debugger.php');
 
-				$this->handle = tmpfile();
-				$this->native('fwrite', $this->handle, $content);
-				$this->native('fseek', $this->handle, 0);
-				return TRUE;
-			}
-		} else {
-			$this->handle = $this->context !== NULL
-				? $this->native('fopen', $path, $mode, $usePath, $this->context)
-				: $this->native('fopen', $path, $mode, $usePath);
-			return (bool) $this->handle;
+		$search1 = 'if (self::$showBar && !Helpers::isCli())';
+		if (!str_contains($patchedDebuggerCode, $search1)) { // can't find where to put patch (new Tracy version?)
+			throw new \RuntimeException(sprintf('Can\'t find code "%s" in \'Debugger.php\'.', $search1));
 		}
-	}
 
+		$patchedDebuggerCode = str_replace(
+			$search1,
+			'if (self::$showBar && (!Helpers::isCli() || \Forrest79\TracyRemoteDevelopmentStrategy\RemoteBar::isRemoteActive()))',
+			$patchedDebuggerCode,
+		);
 
-	/**
-	 * @return string|FALSE
-	 */
-	public function stream_read(int $count)
-	{
-		return fread($this->handle, $count);
-	}
-
-
-	public function stream_seek(int $offset, int $whence = SEEK_SET): bool
-	{
-		return fseek($this->handle, $offset, $whence) === 0;
-	}
-
-
-	public function stream_set_option(int $option, int $arg1, int $arg2): bool
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * @return array<mixed>|FALSE
-	 */
-	public function stream_stat()
-	{
-		return fstat($this->handle);
-	}
-
-
-	public function stream_tell(): int
-	{
-		return ftell($this->handle);
-	}
-
-
-	public function stream_truncate(int $newSize): bool
-	{
-		return ftruncate($this->handle, $newSize);
-	}
-
-
-	/**
-	 * @return int|FALSE
-	 */
-	public function stream_write(string $data)
-	{
-		return fwrite($this->handle, $data);
-	}
-
-
-	public function unlink(string $path): bool
-	{
-		return $this->native('unlink', $path);
-	}
-
-
-	/**
-	 * @return mixed
-	 */
-	public function url_stat(string $path, int $flags)
-	{
-		$func = $flags & STREAM_URL_STAT_LINK ? 'lstat' : 'stat';
-		return $flags & STREAM_URL_STAT_QUIET
-			? @$this->native($func, $path)
-			: $this->native($func, $path);
-	}
-
-
-	/**
-	 * @return mixed
-	 */
-	private function native(string $func)
-	{
-		stream_wrapper_restore(self::PROTOCOL);
-		try {
-			return $func(...array_slice(func_get_args(), 1));
-		} finally {
-			stream_wrapper_unregister(self::PROTOCOL);
-			stream_wrapper_register(self::PROTOCOL, self::class);
+		$search2 = 'new DevelopmentStrategy(';
+		if (!str_contains($patchedDebuggerCode, $search2)) { // can't find where to put patch (new Tracy version?)
+			throw new \RuntimeException(sprintf('Can\'t find code "%s" in \'Debugger.php\'.', $search2));
 		}
+
+		$patchedDebuggerCode = str_replace(
+			$search2,
+			'new \Forrest79\TracyRemoteDevelopmentStrategy\Tracy\DevelopmentStrategy(',
+			$patchedDebuggerCode,
+		);
+
+		$search3 = 'require_once dirname(__DIR__) . "/$path.php";';
+		if (!str_contains($patchedDebuggerCode, $search3)) { // can't find where to put patch (new Tracy version?)
+			throw new \RuntimeException(sprintf('Can\'t find code "%s" in \'Debugger.php\'.', $search3));
+		}
+
+		file_put_contents($patchedFile, str_replace(
+			$search3,
+			'require_once "' . realpath($appDir . '/vendor/tracy/tracy/src/Tracy') . '/$path.php";',
+			$patchedDebuggerCode,
+		));
+	}
+
+
+	private static function patchDevelopmentStrategyPhp(string $appDir, string $patchedFile): void
+	{
+		$patchedDevelopmentStrategyCode = file_get_contents($appDir . '/vendor/tracy/tracy/src/Tracy/Debugger/DevelopmentStrategy.php');
+
+		$search = 'final class DevelopmentStrategy';
+		if (!str_contains($patchedDevelopmentStrategyCode, $search)) { // can't find where to put patch (new Tracy version?)
+			throw new \RuntimeException(sprintf('Can\'t find code "%s" in \'DevelopmentStrategy.php\'.', $search));
+		}
+
+		file_put_contents($patchedFile, str_replace(
+			$search,
+			'class DevelopmentStrategy',
+			$patchedDevelopmentStrategyCode,
+		));
+	}
+
+
+	private static function detectTracyVersion(string $appDir): string
+	{
+		$composerLockData = file_get_contents($appDir . '/composer.lock');
+		$composerLock = json_decode($composerLockData, associative: TRUE, flags: JSON_THROW_ON_ERROR);
+		foreach ($composerLock['packages'] as $package) {
+			if ($package['name'] === 'tracy/tracy') {
+				return substr($package['version'], 1);
+			};
+		};
+
+		throw new \RuntimeException('There is missing \'tracy/trayc\' package in your vendor.');
+	}
+
+
+	private static function composerLockMTime(string $appDir): int|NULL
+	{
+		$lockMtime = @filemtime($appDir . '/composer.lock'); // intentionally @ - file may not exist
+		if ($lockMtime === FALSE) {
+			return NULL;
+		}
+
+		return $lockMtime;
 	}
 
 }
