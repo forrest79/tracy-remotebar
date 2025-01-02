@@ -37,6 +37,7 @@
 			"Forrest79\\TracyRemoteBar\\Tests\\": "tests/"
 		}
 	},
+	"bin": ["bin/run-tracy-remote-bar-server"],
 	"scripts": {
 		"tests": "tests/run-tests.php",
 		"phpcs": "vendor/bin/phpcs --bootstrap=vendor/forrest79/phpcs-ignores/src/bootstrap-outdated.php --extensions=php --ignore=vendor/*,temp/* -s src tests example",

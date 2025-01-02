@@ -1,6 +1,0 @@
-#!/bin/sh
-
-# @todo can change port and IP?
-# @todo add to composer bin
-
-php -S 0.0.0.0:7979 -t ${0%/*}/../src/Client/public
