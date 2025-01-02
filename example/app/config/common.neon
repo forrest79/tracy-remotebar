@@ -7,7 +7,7 @@ application:
 		*: App\*Module\Presenters\*Presenter
 
 extensions:
-	tracyRemoteBar: Forrest79\TracyRemoteDevelopmentStrategy\Bridges\Nette\TracyRemoteDevelopmentStrategyExtension
+	tracyRemoteBar: Forrest79\TracyRemoteBar\Bridges\Nette\TracyRemoteBarExtension
 
 session:
 	expiration: 14 days

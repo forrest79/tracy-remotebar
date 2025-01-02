@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Forrest79\TracyRemoteDevelopmentStrategy;
+namespace Forrest79\TracyRemoteBar;
 
 use Tracy\Debugger;
 use Tracy\Helpers;
 
-class RemoteBar
+class Remote
 {
 	private static string|NULL $serverUrl = NULL;
 
@@ -16,15 +16,15 @@ class RemoteBar
 	}
 
 
-	public static function isRemoteActive(): bool
+	public static function isActive(): bool
 	{
 		return self::$serverUrl !== NULL;
 	}
 
 
-	public static function add(string $html): void
+	public static function addBar(string $html): void
 	{
-		if (!self::isRemoteActive()) {
+		if (!self::isActive()) {
 			return;
 		}
 
@@ -37,6 +37,8 @@ class RemoteBar
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $html);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 2);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: text/plain',
 			'Content-Length: ' . strlen($html),
@@ -57,10 +59,10 @@ class RemoteBar
 
 	public static function dispatchBars(): void
 	{
-		if (self::isRemoteActive() && !(bool) Debugger::$productionMode) {
+		if (self::isActive() && !(bool) Debugger::$productionMode) {
 			Debugger::removeOutputBuffers(FALSE);
 			try {
-				self::add(Helpers::capture(static function (): void {
+				self::addBar(Helpers::capture(static function (): void {
 					Debugger::getStrategy()->renderBar();
 				}));
 			} catch (\Throwable $e) {
@@ -73,17 +75,6 @@ class RemoteBar
 	public static function isHttpAjax(): bool
 	{
 		return ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest';
-	}
-
-
-	/**
-	 * @param class-string $class
-	 */
-	public static function classDir(string $class): string
-	{
-		$filename = (new \ReflectionClass($class))->getFileName();
-		assert($filename !== FALSE);
-		return dirname($filename);
 	}
 
 }

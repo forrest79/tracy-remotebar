@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Forrest79\TracyRemoteDevelopmentStrategy\Tracy;
+namespace Forrest79\TracyRemoteBar\Tracy;
 
-use Forrest79\TracyRemoteDevelopmentStrategy\Helper;
-use Forrest79\TracyRemoteDevelopmentStrategy\RemoteBar;
+use Forrest79\TracyRemoteBar\Helper;
+use Forrest79\TracyRemoteBar\Remote;
 use Tracy;
 use Tracy\DeferredContent;
 use Tracy\Helpers;
@@ -28,8 +28,8 @@ class DevelopmentStrategy extends Tracy\DevelopmentStrategy
 
 	public function handleException(\Throwable $exception, bool $firstTime): void
 	{
-		if (RemoteBar::isRemoteActive() && RemoteBar::isHttpAjax()) {
-			RemoteBar::add(Helpers::capture(function () use ($exception): void {
+		if (Remote::isActive() && Remote::isHttpAjax()) {
+			Remote::addBar(Helpers::capture(function () use ($exception): void {
 				(function () use ($exception): void {
 					$this->renderTemplate($exception, Helper::classDir(Tracy\BlueScreen::class) . '/assets/page.phtml', FALSE);
 				})->call($this->blueScreen);
@@ -43,13 +43,13 @@ class DevelopmentStrategy extends Tracy\DevelopmentStrategy
 
 	public function renderBar(): void
 	{
-		if (RemoteBar::isRemoteActive()) {
-			RemoteBar::add(Helpers::capture(function (): void {
+		if (Remote::isActive()) {
+			Remote::addBar(Helpers::capture(function (): void {
 				if (function_exists('ini_set')) {
 					ini_set('display_errors', '1');
 				}
 
-				if (RemoteBar::isHttpAjax()) {
+				if (Remote::isHttpAjax()) {
 					$type = 'ajax';
 				} elseif (Helpers::isCli()) {
 					$type = 'cli';

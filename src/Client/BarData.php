@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Forrest79\TracyRemoteDevelopmentStrategy\Client;
+namespace Forrest79\TracyRemoteBar\Server;
 
-use Forrest79\TracyRemoteDevelopmentStrategy\Helper;
+use Forrest79\TracyRemoteBar\Helper;
 
 class BarData
 {

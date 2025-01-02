@@ -9,7 +9,7 @@ class Bootstrap
 
 	public static function boot(): Configurator
 	{
-		$configurator = new Configurator;
+		$configurator = new Configurator();
 		$appDir = dirname(__DIR__);
 
 		$configurator->setDebugMode(TRUE);
@@ -22,9 +22,10 @@ class Bootstrap
 			->addDirectory(__DIR__)
 			->register();
 
-		$configurator
-			->addConfig($appDir . '/config/common.neon')
-			->addConfig($appDir . '/config/local.neon');
+		$configurator->addConfig($appDir . '/config/common.neon');
+		if (is_file($appDir . '/config/local.neon')) {
+			$configurator->addConfig($appDir . '/config/local.neon');
+		}
 
 		return $configurator;
 	}

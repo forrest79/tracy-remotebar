@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Forrest79\TracyRemoteDevelopmentStrategy\Bridges\Nette;
+namespace Forrest79\TracyRemoteBar\Bridges\Nette;
 
-use Forrest79\TracyRemoteDevelopmentStrategy;
+use Forrest79\TracyRemoteBar;
 use Nette;
 use Nette\Schema\Expect;
 
-class TracyRemoteDevelopmentStrategyExtension extends Nette\DI\CompilerExtension
+class TracyRemoteBarExtension extends Nette\DI\CompilerExtension
 {
 
 	public function getConfigSchema(): Nette\Schema\Schema
@@ -29,7 +29,7 @@ class TracyRemoteDevelopmentStrategyExtension extends Nette\DI\CompilerExtension
 			assert($body !== NULL);
 			$class->getMethod('initialize')->setBody($body);
 
-			$this->initialization->addBody(TracyRemoteDevelopmentStrategy\RemoteBar::class . '::setServerUrl(?);', [$serverUrl]);
+			$this->initialization->addBody(TracyRemoteBar\Remote::class . '::setServerUrl(?);', [$serverUrl]);
 		}
 	}
 

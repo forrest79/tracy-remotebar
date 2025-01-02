@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Tracy-RemoteDevelopmentStrategy">
+<ruleset name="Tracy-RemoteBar">
 	<rule ref="./vendor/forrest79/phpcs/Forrest79CodingStandard/ruleset.xml"/>
 
 	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
@@ -9,8 +9,9 @@
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
 			<property name="rootNamespaces" type="array" value="
-				src=>Forrest79\TracyRemoteDevelopmentStrategy,
-				tests=>Forrest79\TracyRemoteDevelopmentStrategy\Tests,
+				src=>Forrest79\TracyRemoteBar,
+				tests=>Forrest79\TracyRemoteBar\Tests,
+				example/app/src=>App,
 			"/>
 		</properties>
 	</rule>

@@ -2,7 +2,6 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-
-$container = App\Bootstrap::boot()->createContainer();
+App\Bootstrap::boot()->createContainer();
 
 bdump('Cli request ' . date('H:i:s'));
