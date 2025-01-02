@@ -3,3 +3,28 @@ includes:
 
 parameters:
 	level: max
+
+	excludePaths:
+		- src/Tracy/DevelopmentStrategy.php # because of extending final class
+		- example/app/logs
+		- example/app/temp
+		- example/app/vendor
+
+	ignoreErrors:
+		-
+			message: '#^While loop condition is always true\.$#'
+			identifier: while.alwaysTrue
+			count: 1
+			path: example/app/bin/tracy-service-test.php
+
+		-
+			message: '#^Function this_is_fatal_error not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: example/app/src/Presenters/HomepagePresenter.php
+
+		-
+			message: '#^Property Forrest79\\TracyRemoteBar\\Server\\BarData\:\:\$data \(array\<int, string\>\) does not accept array\<mixed, mixed\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Server/BarData.php

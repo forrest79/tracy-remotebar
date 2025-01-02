@@ -1,3 +1,3 @@
 <?php declare(strict_types=1);
 
-Forrest79\TracyRemoteDevelopmentStrategy\Patcher::patch();
+Forrest79\TracyRemoteBar\Patcher::patch();

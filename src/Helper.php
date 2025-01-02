@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Forrest79\TracyRemoteDevelopmentStrategy;
+namespace Forrest79\TracyRemoteBar;
 
 class Helper
 {
 
 	/**
-	 * @param \class-string $class
+	 * @param class-string $class
 	 */
 	public static function classDir(string $class): string
 	{

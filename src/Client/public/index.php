@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Forrest79\TracyRemoteDevelopmentStrategy\Client;
+use Forrest79\TracyRemoteBar\Server;
 use Tracy\Debugger;
 
 if (!@include_once __DIR__ . '/../../../../../autoload.php') { // intentionally @ - file may not exists in package development
@@ -27,7 +27,7 @@ switch (strtolower(trim($path, '/'))) {
 		exit;
 
 	case 'api':
-		$barData = new Client\BarData();
+		$barData = new Server\BarData();
 		$barData->load();
 
 		// Enable CORS for origin

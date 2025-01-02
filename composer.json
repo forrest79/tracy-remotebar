@@ -1,6 +1,6 @@
 {
-	"name": "forrest79/tracy-remotedevelopmentstrategy",
-	"description": "",
+	"name": "forrest79/tracy-remotebar",
+	"description": "Show Tracy bars from API, cli or classic web requests on a separate remote client.",
 	"keywords": ["tracy", "remote", "bar"],
 	"type": "library",
 	"license": "BSD-3-Clause",
@@ -17,26 +17,30 @@
 	"require-dev": {
 		"forrest79/phpcs": "^1.5",
 		"forrest79/phpcs-ignores": "^0.5",
+		"latte/latte": "^3.0",
+		"nette/application": "^3.1",
+		"nette/bootstrap": "^3.1",
 		"nette/di": "^3.1",
-		"phpstan/phpstan": "^2.0",
+		"phpstan/phpstan": "^2.1",
+		"phpstan/phpstan-nette": "^2.0",
 		"phpstan/phpstan-strict-rules": "^2.0",
-		"tracy/tracy":  "^2.10"
+		"tracy/tracy": "^2.10"
 	},
 	"autoload": {
 		"psr-4": {
-			"Forrest79\\TracyRemoteDevelopmentStrategy\\": "src/"
+			"Forrest79\\TracyRemoteBar\\": "src/"
 		},
  		"files": ["src/patch-tracy.php"]
  	},
 	"autoload-dev": {
 		"psr-4": {
-			"Forrest79\\TracyRemoteDevelopmentStrategy\\Tests\\": "tests/"
+			"Forrest79\\TracyRemoteBar\\Tests\\": "tests/"
 		}
 	},
 	"scripts": {
 		"tests": "tests/run-tests tests",
-		"phpcs": "vendor/bin/phpcs --bootstrap=vendor/forrest79/phpcs-ignores/src/bootstrap-outdated.php -s src tests",
-		"phpstan": "vendor/bin/phpstan analyse src tests"
+		"phpcs": "vendor/bin/phpcs --bootstrap=vendor/forrest79/phpcs-ignores/src/bootstrap-outdated.php --extensions=php --ignore=vendor/*,temp/* -s src tests example",
+		"phpstan": "vendor/bin/phpstan analyse src tests example"
 	},
 	"config": {
 		"allow-plugins": {

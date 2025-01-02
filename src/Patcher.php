@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Forrest79\TracyRemoteDevelopmentStrategy;
+namespace Forrest79\TracyRemoteBar;
 
 use Composer;
 
@@ -22,13 +22,17 @@ final class Patcher
 			$appDir = Helper::classDir(Composer\Autoload\ClassLoader::class) . '/../..';
 			$composerLockMTime = self::composerLockMTime($appDir);
 			if ($composerLockMTime === NULL) {
+				if (defined('__PHPSTAN_RUNNING__')) { // don't fail while PHPStan is running
+					return;
+				}
+
 				throw new \RuntimeException('Can\'t detect composer lock file.');
 			}
 		}
 
 		$dir = Helper::createTempDir('tracy-remotebar/patched/' . $composerLockMTime);
 		$patchedDebuggerFile = $dir . '/Debugger.php';
-		$patchedDevelopmentStrategyFile =  $dir . '/DevelopmentStrategy.php';
+		$patchedDevelopmentStrategyFile = $dir . '/DevelopmentStrategy.php';
 		if (!is_file($patchedDebuggerFile) || !is_file($patchedDevelopmentStrategyFile)) {
 			$tracyVersion = self::detectTracyVersion($appDir);
 			if (version_compare($tracyVersion, self::MIN_TRACY_VERSION, '<')) {
@@ -47,6 +51,9 @@ final class Patcher
 	private static function patchDebuggerPhp(string $appDir, string $patchedFile): void
 	{
 		$patchedDebuggerCode = file_get_contents($appDir . '/vendor/tracy/tracy/src/Tracy/Debugger/Debugger.php');
+		if ($patchedDebuggerCode === FALSE) {
+			throw new \RuntimeException('Can\'t find \'Debugger.php\' in Tracy package.');
+		}
 
 		$search1 = 'if (self::$showBar && !Helpers::isCli())';
 		if (!str_contains($patchedDebuggerCode, $search1)) { // can't find where to put patch (new Tracy version?)
@@ -55,7 +62,7 @@ final class Patcher
 
 		$patchedDebuggerCode = str_replace(
 			$search1,
-			'if (self::$showBar && (!Helpers::isCli() || \Forrest79\TracyRemoteDevelopmentStrategy\RemoteBar::isRemoteActive()))',
+			'if (self::$showBar && (!Helpers::isCli() || \\' . Remote::class . '::isActive()))',
 			$patchedDebuggerCode,
 		);
 
@@ -66,7 +73,7 @@ final class Patcher
 
 		$patchedDebuggerCode = str_replace(
 			$search2,
-			'new \Forrest79\TracyRemoteDevelopmentStrategy\Tracy\DevelopmentStrategy(',
+			'new \\' . Tracy\DevelopmentStrategy::class . '(',
 			$patchedDebuggerCode,
 		);
 
@@ -86,6 +93,9 @@ final class Patcher
 	private static function patchDevelopmentStrategyPhp(string $appDir, string $patchedFile): void
 	{
 		$patchedDevelopmentStrategyCode = file_get_contents($appDir . '/vendor/tracy/tracy/src/Tracy/Debugger/DevelopmentStrategy.php');
+		if ($patchedDevelopmentStrategyCode === FALSE) {
+			throw new \RuntimeException('Can\'t find \'DevelopmentStrategy.php\' in Tracy package.');
+		}
 
 		$search = 'final class DevelopmentStrategy';
 		if (!str_contains($patchedDevelopmentStrategyCode, $search)) { // can't find where to put patch (new Tracy version?)
@@ -103,14 +113,22 @@ final class Patcher
 	private static function detectTracyVersion(string $appDir): string
 	{
 		$composerLockData = file_get_contents($appDir . '/composer.lock');
-		$composerLock = json_decode($composerLockData, associative: TRUE, flags: JSON_THROW_ON_ERROR);
-		foreach ($composerLock['packages'] as $package) {
-			if ($package['name'] === 'tracy/tracy') {
-				return substr($package['version'], 1);
-			};
-		};
+		if ($composerLockData === FALSE) {
+			throw new \RuntimeException('Can\'t load \'composer.lock\'.');
+		}
 
-		throw new \RuntimeException('There is missing \'tracy/trayc\' package in your vendor.');
+		$composerLock = json_decode($composerLockData, associative: TRUE, flags: JSON_THROW_ON_ERROR);
+		assert(is_array($composerLock) && is_array($composerLock['packages']) && is_array($composerLock['packages-dev']));
+
+		foreach (array_merge($composerLock['packages'], $composerLock['packages-dev']) as $package) {
+			assert(is_array($package));
+			if ($package['name'] === 'tracy/tracy') {
+				assert(is_string($package['version']));
+				return substr($package['version'], 1);
+			}
+		}
+
+		throw new \RuntimeException('There is missing \'tracy/tracy\' package in your vendor.');
 	}
 
 
