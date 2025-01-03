@@ -8,6 +8,10 @@ class Remote
 {
 	private static string|NULL $serverUrl = NULL;
 
+	private static int $curlConnectTimeout = 1;
+
+	private static int $curlTimeout = 1;
+
 
 	public static function setServerUrl(string $serverUrl): void
 	{
@@ -18,6 +22,13 @@ class Remote
 	public static function isActive(): bool
 	{
 		return self::$serverUrl !== NULL;
+	}
+
+
+	public static function setCurlTimeouts(int $connectTimeout, int $timeout): void
+	{
+		self::$curlConnectTimeout = $connectTimeout;
+		self::$curlTimeout = $timeout;
 	}
 
 
@@ -36,8 +47,8 @@ class Remote
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $html);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$curlConnectTimeout);
+		curl_setopt($ch, CURLOPT_TIMEOUT, self::$curlTimeout);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: text/plain',
 			'Content-Length: ' . strlen($html),
