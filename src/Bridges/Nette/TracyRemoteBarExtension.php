@@ -24,11 +24,6 @@ class TracyRemoteBarExtension extends Nette\DI\CompilerExtension
 		assert($serverUrl === NULL || is_string($serverUrl));
 
 		if ($serverUrl !== NULL) {
-			$body = $class->getMethod('initialize')->getBody();
-			$body = preg_replace('#// tracy\.\n\(function \(\) {?.+}\)\(\);\n#ms', '', $body);
-			assert($body !== NULL);
-			$class->getMethod('initialize')->setBody($body);
-
 			$this->initialization->addBody(TracyRemoteBar\Remote::class . '::setServerUrl(?);', [$serverUrl]);
 		}
 	}
