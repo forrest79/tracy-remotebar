@@ -36,6 +36,12 @@ ignoreErrors:
 		path: src/Bridges/Nette/TracyRemoteBarExtension.php
 
 	-
+		sniff: SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+		message: Unused parameter $class.
+		count: 1
+		path: src/Bridges/Nette/TracyRemoteBarExtension.php
+
+	-
 		sniff: SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal
 		message: All classes should be declared using either the "abstract" or "final" keyword.
 		count: 1
