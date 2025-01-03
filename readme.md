@@ -1,10 +1,29 @@
-# Remote bars
+# Tracy - Remote bars
 
-Remote bars renders Tracy bars not to a web page, but to a separate browser tab or Chrome Dev tab. This allows also using bars for non-HTML requests and cli.
+[![Latest Stable Version](https://poser.pugx.org/forrest79/tracy-remotebar/v)](//packagist.org/packages/forrest79/tracy-remotebar)
+[![Monthly Downloads](https://poser.pugx.org/forrest79/tracy-remotebar/d/monthly)](//packagist.org/packages/forrest79/tracy-remotebar)
+[![License](https://poser.pugx.org/forrest79/tracy-remotebar/license)](//packagist.org/packages/forrest79/tracy-remotebar)
+[![Build](https://github.com/forrest79/tracy-remotebar/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/forrest79/tracy-remotebar/actions/workflows/build.yml)
 
-[![Watch the video how remote bars work](https://github.com/forrest79/tracy/raw/master/remote-bars.gif)](https://www.youtube.com/watch?v=QlfuULJbgFw)
+## Introduction
 
-[Watch the video how remote bars work on YouTube](https://www.youtube.com/watch?v=QlfuULJbgFw)
+Remote bar renders Tracy bars not to a web page, but to a separate browser tab or Chrome Dev tab. This allows also using bars for non-HTML requests and cli.
+
+[![Watch the video how remote bars work](https://github.com/forrest79/tracy-remotebar/raw/master/tracy-remotebar.gif)](https://www.youtube.com/watch?v=QlfuULJbgFw)
+
+[Watch the video how remote bars work on YouTube](https://www.youtube.com/watch?v=ELMyJ9pygCk)
+
+## Installation
+
+To use this extension, require it in [Composer](https://getcomposer.org/):
+
+```
+composer require --dev forrest79/tracy-remotebar
+```
+
+> Use this extension only in your DEV environment.
+
+## How does it work?
 
 Remote bars uses a running standalone HTTP server that collects bars and also have a simple HTML interface to show them.
 
@@ -22,31 +41,7 @@ tracy:
 
 3. to see remote rendered bars open your server URL (mostly `http://127.0.0.1:7979`) in your browser or use Chrome Dev extension (open `Manage extensions`, switch `Developer mode` on, click `Load unpacked` and choose `src/chrome-dev-panel` directory - you can set custom server URL in extension options)
 
-> `Cli` - there is one new function especially for cli - `Tracy\Debugger::dispatchBars()` - this is handy for long-running scripts, call this and bars will be sent to server immediately (you can call this repeatedly).
-
-### How to install remote bars version instead of classic Tracy
-
-Update your `composer.json`. Add new repository and use branch name with the version you want as `tracy\tracy` version:
-
-```json
-{
-	"require": {
-		"tracy/tracy": "dev-remote-bars-v2.10.8 as 2.10.8"
-	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/forrest79/tracy.git"
-		}
-	]
-}
-```
-
-And run composer update:
-
-```shell
-composer update tracy/tracy
-```
+> `Cli` - there is one new function especially for cli - `Forrest79\TracyRemoteBar\Remote::dispatchBars()` - this is handy for long-running scripts, call this and bars will be sent to server immediately (you can call this repeatedly).
 
 ### Sample nginx configuration
 
@@ -67,7 +62,7 @@ server {
 
 	server_name tracy.local;
 
-	client_max_body_size 100m;
+	client_max_body_size 20m;
 
 	root /var/www/project/vendor/tracy/tracy/src/Remote/public;
 
