@@ -6,6 +6,8 @@ use Forrest79\TracyRemoteBar\Helper;
 
 class BarData
 {
+	private const MAX_SAVED_BAR_COUNT = 50;
+
 	private const DATA_FILE = 'bars.json';
 	private const LOCK_FILE = 'bars.json.lock';
 
@@ -36,7 +38,7 @@ class BarData
 			if ($content === FALSE) {
 				@unlink($dir . '/' . self::DATA_FILE); // intentionally @ - file may not exist
 			} else {
-				$data = json_decode($content);
+				$data = json_decode($content, associative: TRUE, flags: JSON_THROW_ON_ERROR);
 				assert(is_array($data));
 				$this->data = $data;
 			}
@@ -44,21 +46,23 @@ class BarData
 	}
 
 
-	public function barCount(): int
+	public function barIdRange(): string
 	{
-		return count($this->data);
+		return $this->data === [] ? '0-0' : array_key_first($this->data) . '-' . array_key_last($this->data);
 	}
 
 
 	public function getBar(int $id): string|NULL
 	{
-		return $this->data[$id - 1] ?? NULL;
+		return $this->data[$id] ?? NULL;
 	}
 
 
 	public function addBar(string $bar): void
 	{
-		$this->data[] = self::fixBarHtml($bar);
+		$newId = ($this->data === [] ? 0 : array_key_last($this->data)) + 1;
+
+		$this->data[$newId] = self::fixBarHtml($bar);
 	}
 
 
@@ -74,7 +78,7 @@ class BarData
 			throw new \RuntimeException('Data are not loaded.');
 		}
 
-		file_put_contents(self::dir() . '/' . self::DATA_FILE, json_encode($this->data));
+		file_put_contents(self::dir() . '/' . self::DATA_FILE, json_encode(array_slice($this->data, -1 * self::MAX_SAVED_BAR_COUNT, preserve_keys: TRUE)));
 
 		flock($this->lockHandle, LOCK_UN);
 		fclose($this->lockHandle);

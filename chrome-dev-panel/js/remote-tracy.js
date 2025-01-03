@@ -17,12 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			return Promise.reject(response);
 		}).then((data) => {
-			processLastId(parseInt(data.toString(), 10));
+			const indexes = data.toString().split('-', 2);
+			const firstIdOnServer = parseInt(indexes[0], 10);
+			const lastIdOnServer = parseInt(indexes[1], 10);
+
+			if (firstIdOnServer > lastId) {
+				lastId = firstIdOnServer - 1;
+			}
+
+			process(lastIdOnServer);
 
 			onSuccess();
 			errorCount = 0;
 		}).catch(() => {
-			processLastId(0);
+			process(0);
 
 			errorCount++
 			if (errorCount >= 3) {
@@ -32,10 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	};
 
-	const processLastId = (id) => {
-		if (id > lastId) {
-			for (let i = lastId + 1; i <= id; i++) {
-				addNewBar(i);
+	const process = (lastIdOnServer) => {
+		if (lastIdOnServer > lastId) {
+			for (let id = lastId + 1; id <= lastIdOnServer; id++) {
+				addNewBar(id);
+				lastId = id;
 			}
 		}
 		setTimeout(() => checkNewBar(), 2000);
@@ -46,8 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		iframe.setAttribute('src', url + '/api/?id=' + id);
 
 		bars.prepend(iframe);
-
-		lastId = id;
 	};
 
 	checkNewBar();

@@ -51,7 +51,7 @@ switch (strtolower(trim($path, '/'))) {
 					echo $html;
 				}
 			} else {
-				echo $barData->barCount();
+				echo $barData->barIdRange();
 			}
 		} else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 			$barData->clear();
