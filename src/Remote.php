@@ -42,7 +42,7 @@ class Remote
 
 		$ch = curl_init();
 
-		$html = trim($html);
+		$html = self::fixBarHtml($html);
 
 		curl_setopt($ch, CURLOPT_URL, rtrim(self::$serverUrl, '/') . '/api/');
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -66,6 +66,16 @@ class Remote
 				Debugger::log('# HTTP code ' . $httpCode . ' was returned.', 'tracy-remote-bar');
 			}
 		}
+	}
+
+
+	private static function fixBarHtml(string $html): string
+	{
+		$html = preg_replace('# src=\"(.)+_tracy_bar=#', ' src="/tracy-assets/?_tracy_bar=', $html); // correct assets URL
+		assert($html !== NULL);
+		$html = str_replace('<li><a href=\\"#\\" data-tracy-action=\\"close\\" title=\\"close debug bar\\">&times;</a></li>', '', $html); // hide close button
+		$html = str_replace(' data-tracy-group=\\"cli\\">', ' data-tracy-group=\\"cli\\"><li>CLI</li>', $html); // add missing cli info
+		return trim($html);
 	}
 
 
