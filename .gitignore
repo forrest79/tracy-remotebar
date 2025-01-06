@@ -1,0 +1,6 @@
+/example/app/logs/
+/example/app/temp/
+/example/app/vendor/
+/example/app/composer.lock
+/vendor/
+/composer.lock

@@ -1,0 +1,2 @@
+parameters:
+	remoteServerUrl: 'http://tracy.test:80'

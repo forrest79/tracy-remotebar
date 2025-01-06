@@ -1,0 +1,22 @@
+<html lang="en">
+<head>
+	<title>Tracy - Remote bar</title>
+	<script>
+		const url = '';
+		const onSuccess = () => {
+			document.getElementById('clear').textContent = 'Clear';
+		};
+		const onError = () => {
+			document.getElementById('clear').textContent = 'Server is not running. Please start it...';
+		};
+		<?php require __DIR__ . '/../../../chrome-dev-panel/js/remote-tracy.js'; ?>
+	</script>
+	<style>
+		<?php require __DIR__ . '/../../../chrome-dev-panel/css/remote-tracy.css'; ?>
+	</style>
+</head>
+<body>
+	<button id="clear">Clear</button>
+	<div id="bars"></div>
+</body>
+</html>

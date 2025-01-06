@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# @todo can change port and IP?
+
+php -S 0.0.0.0:8000 -t ${0%/*}/app/public

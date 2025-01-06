@@ -1,0 +1,38 @@
+iframe {
+	box-sizing: border-box;
+	width: 100%;
+	height: 35px;
+	border: 1px solid #c9c9c9;
+	border-bottom: none;
+	padding: 5px 5px 5px 50px;
+	background-color: #edeae0;
+	background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16"><path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2"/></svg>');
+	background-repeat: no-repeat;
+	background-position: bottom 5px left 5px;
+}
+
+iframe:last-child {
+	border-bottom: 1px solid #c9c9c9;
+}
+
+iframe.locked {
+	background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/></svg>')
+}
+
+iframe.big {
+	height: 80%;
+}
+
+button#clear {
+	background-color: #cd1818;
+	border: none;
+	color: white;
+	cursor: pointer;
+	width: 100%;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	font-size: 16px;
+	margin-bottom: 15px;
+}

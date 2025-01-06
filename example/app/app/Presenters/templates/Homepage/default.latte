@@ -1,0 +1,43 @@
+{block content}
+
+<h2>Tracy: Redirect</h2>
+
+<p>
+	<a n:href="redirect">Make redirect</a>
+</p>
+
+<hr>
+
+<h2>Tracy: AJAX demo using fetch()</h2>
+
+<p>
+	<button class="fetch">AJAX request</button> <span id="result-fetch">see Debug Bar in the bottom right corner</span>
+</p>
+
+<p>
+	<button class="fetch error">Request with error</button> use ESC to toggle BlueScreen
+</p>
+
+<hr>
+
+<h2>Tracy: AJAX demo</h2>
+
+<p>
+	<button class="jquery">AJAX request</button> <span id="result-jquery">see Debug Bar in the bottom right corner</span>
+</p>
+
+<p>
+	<button class="jquery error">Request with error</button> use ESC to toggle BlueScreen
+</p>
+
+<hr>
+
+<h2>Tracy: API demo</h2>
+
+<p>
+	<a n:href="api">Make GET API requests</a>
+</p>
+
+<p>
+	<a n:href="api, error => 1">Make GET API requests with error</a>
+</p>

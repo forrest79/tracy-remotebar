@@ -1,0 +1,47 @@
+server {
+	listen 80;
+
+	server_name tracy.test;
+
+	root example/app/vendor/forrest79/tracy-remotedevelopmentstrategy/src/Client/public;
+
+	index index.php;
+
+	client_max_body_size 100M;
+
+	location / {
+		try_files $uri $uri/ /index.php$is_args$args;
+	}
+
+	location ~* \.php$ {
+		include snippets/fastcgi-php.conf;
+
+		fastcgi_pass 127.0.0.1:9000;
+		fastcgi_param DOCUMENT_ROOT $document_root;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+	}
+}
+
+server {
+	listen 80;
+
+	server_name tracy.app.test;
+
+	root example/app/public;
+
+	index index.php;
+
+	client_max_body_size 100M;
+
+	location / {
+		try_files $uri $uri/ /index.php$is_args$args;
+	}
+
+	location ~* \.php$ {
+		include snippets/fastcgi-php.conf;
+
+		fastcgi_pass 127.0.0.1:9000;
+		fastcgi_param DOCUMENT_ROOT $realpath_root;
+		fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+	}
+}
