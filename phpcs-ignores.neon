@@ -54,12 +54,6 @@ ignoreErrors:
 		path: src/Remote.php
 
 	-
-		sniff: SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
-		message: Use of super global variable is disallowed.
-		count: 1
-		path: src/Remote.php
-
-	-
 		sniff: SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal
 		message: All classes should be declared using either the "abstract" or "final" keyword.
 		count: 1
@@ -74,6 +68,12 @@ ignoreErrors:
 	-
 		sniff: SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal
 		message: All classes should be declared using either the "abstract" or "final" keyword.
+		count: 1
+		path: src/Tracy/DevelopmentStrategy.php
+
+	-
+		sniff: SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
+		message: Use of super global variable is disallowed.
 		count: 1
 		path: src/Tracy/DevelopmentStrategy.php
 

@@ -81,7 +81,7 @@ class Remote
 
 	public static function dispatchBars(): void
 	{
-		if (self::isActive() && !(bool) Debugger::$productionMode) {
+		if (self::isActive()) {
 			Debugger::removeOutputBuffers(FALSE);
 			try {
 				Debugger::getStrategy()->renderBar();
@@ -89,12 +89,6 @@ class Remote
 				Debugger::exceptionHandler($e);
 			}
 		}
-	}
-
-
-	public static function isHttpAjax(): bool
-	{
-		return ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest';
 	}
 
 }
