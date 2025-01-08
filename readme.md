@@ -85,6 +85,8 @@ server {
 }
 ```
 
+> `client_max_body_size` is important, bar HTML code is sending via POST method in body, and the HTML can be big
+
 Use the correct path in the `root`. You need also host `tracy.test` pointing to your server, and then you can open in your browser `http://tracy.test`.
 
 In your application DI configuration, add this:
@@ -147,8 +149,6 @@ server {
 	root <...>/example/app/public;
 
 	index index.php;
-
-	client_max_body_size 100M;
 
 	location / {
 		try_files $uri $uri/ /index.php$is_args$args;
