@@ -12,7 +12,7 @@ class TracyRemoteBarExtension extends Nette\DI\CompilerExtension
 	public function getConfigSchema(): Nette\Schema\Schema
 	{
 		return Expect::structure([
-			'serverUrl' => Expect::string()->dynamic(),
+			'serverUrl' => Expect::string()->nullable()->dynamic(),
 		]);
 	}
 
