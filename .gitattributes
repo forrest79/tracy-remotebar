@@ -1,5 +1,5 @@
 .github export-ignore
-example
+example export-ignore
 tests export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
