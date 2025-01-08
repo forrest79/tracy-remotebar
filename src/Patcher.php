@@ -11,11 +11,6 @@ final class Patcher
 
 	public static function patch(): void
 	{
-		$dir = sys_get_temp_dir() . '/tracy-remotebar/patched';
-		if (!is_dir($dir) && !mkdir($dir, recursive: TRUE) && !is_dir($dir)) {
-			throw new \RuntimeException(sprintf('Directory "%s" was not created.', $dir));
-		}
-
 		$appDir = __DIR__ . '/../../../..';
 		$composerLockMTime = self::composerLockMTime($appDir);
 		if ($composerLockMTime === NULL) {
