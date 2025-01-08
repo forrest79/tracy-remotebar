@@ -23,7 +23,7 @@ class Helper
 	{
 		$dir = sys_get_temp_dir() . '/' . $dir;
 		if (!is_dir($dir) && !mkdir($dir, recursive: TRUE) && !is_dir($dir)) {
-			throw new \RuntimeException(sprintf('Directory "%s" not exists.', $dir));
+			throw new \RuntimeException(sprintf('Directory "%s" wasn\'t created and don\'t exist.', $dir));
 		}
 
 		return $dir;
