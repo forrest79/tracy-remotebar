@@ -14,15 +14,12 @@ class DevelopmentStrategy extends Tracy\DevelopmentStrategy
 
 	private Tracy\BlueScreen $blueScreen;
 
-	private DeferredContent $defer;
-
 
 	public function __construct(Tracy\Bar $bar, Tracy\BlueScreen $blueScreen, DeferredContent $defer)
 	{
 		parent::__construct($bar, $blueScreen, $defer);
 		$this->bar = $bar;
 		$this->blueScreen = $blueScreen;
-		$this->defer = $defer;
 	}
 
 
@@ -64,7 +61,7 @@ class DevelopmentStrategy extends Tracy\DevelopmentStrategy
 
 				$content = '<div id=tracy-debug-bar>' . $content['bar'] . '</div>' . $content['panels'];
 
-				$requestId = $this->defer->getRequestId();
+				$requestId = '';
 				$nonceAttr = Helpers::getNonceAttr();
 				$async = FALSE;
 
