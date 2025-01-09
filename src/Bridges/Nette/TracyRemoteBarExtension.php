@@ -12,7 +12,8 @@ class TracyRemoteBarExtension extends Nette\DI\CompilerExtension
 	public function getConfigSchema(): Nette\Schema\Schema
 	{
 		return Expect::structure([
-			'serverUrl' => Expect::string()->nullable()->dynamic(),
+			'enabled' => Expect::bool(FALSE)->dynamic(),
+			'serverUrl' => Expect::string()->dynamic(),
 		]);
 	}
 
@@ -20,11 +21,12 @@ class TracyRemoteBarExtension extends Nette\DI\CompilerExtension
 	public function afterCompile(Nette\PhpGenerator\ClassType $class): void
 	{
 		$config = (array) $this->config;
+		$enabled = $config['enabled'];
 		$serverUrl = $config['serverUrl'];
-		assert($serverUrl === NULL || is_string($serverUrl));
+		assert(is_bool($enabled) || is_string($serverUrl));
 
-		if ($serverUrl !== NULL) {
-			$this->initialization->addBody(TracyRemoteBar\Remote::class . '::setServerUrl(?);', [$serverUrl]);
+		if ($enabled) {
+			$this->initialization->addBody(TracyRemoteBar\Remote::class . '::enable(?);', [$serverUrl]);
 		}
 	}
 

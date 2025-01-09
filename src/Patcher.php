@@ -57,7 +57,7 @@ final class Patcher
 
 		$patchedDebuggerCode = str_replace(
 			$search1,
-			'if (self::$showBar && (!Helpers::isCli() || \\' . Remote::class . '::isActive()))',
+			'if (self::$showBar && (!Helpers::isCli() || \\' . Remote::class . '::isEnabled()))',
 			$patchedDebuggerCode,
 		);
 

@@ -2,4 +2,5 @@ extensions:
 	tracyRemoteBar: Forrest79\TracyRemoteBar\Bridges\Nette\TracyRemoteBarExtension
 
 tracyRemoteBar:
+	enabled: true
 	serverUrl: 'http://255.254.253.252:7980' # non-existing server URL

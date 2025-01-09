@@ -13,13 +13,13 @@ class Remote
 	private static int $curlTimeout = 1;
 
 
-	public static function setServerUrl(string $serverUrl): void
+	public static function enable(string $serverUrl): void
 	{
 		self::$serverUrl = $serverUrl;
 	}
 
 
-	public static function isActive(): bool
+	public static function isEnabled(): bool
 	{
 		return self::$serverUrl !== NULL;
 	}
@@ -34,7 +34,7 @@ class Remote
 
 	public static function addBar(string $html): void
 	{
-		if (!self::isActive()) {
+		if (!self::isEnabled()) {
 			return;
 		}
 
@@ -81,7 +81,7 @@ class Remote
 
 	public static function dispatchBars(): void
 	{
-		if (self::isActive()) {
+		if (self::isEnabled()) {
 			Debugger::removeOutputBuffers(FALSE);
 			try {
 				Debugger::getStrategy()->renderBar();

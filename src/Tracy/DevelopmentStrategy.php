@@ -28,7 +28,7 @@ class DevelopmentStrategy extends Tracy\DevelopmentStrategy
 
 	public function handleException(\Throwable $exception, bool $firstTime): void
 	{
-		if (Remote::isActive() && self::isHttpAjax()) {
+		if (Remote::isEnabled() && self::isHttpAjax()) {
 			Remote::addBar(Helpers::capture(function () use ($exception): void {
 				(function () use ($exception): void {
 					$this->renderTemplate($exception, Helper::classDir(Tracy\BlueScreen::class) . '/assets/page.phtml', FALSE);
@@ -43,7 +43,7 @@ class DevelopmentStrategy extends Tracy\DevelopmentStrategy
 
 	public function renderBar(): void
 	{
-		if (Remote::isActive()) {
+		if (Remote::isEnabled()) {
 			Remote::addBar(Helpers::capture(function (): void {
 				if (function_exists('ini_set')) {
 					ini_set('display_errors', '1');

@@ -16,4 +16,5 @@ services:
 	- App\Router\RouterFactory::createRouter
 
 tracyRemoteBar:
+	enabled: true
 	serverUrl: %remoteServerUrl%
