@@ -60,9 +60,21 @@ ignoreErrors:
 		path: src/Server/BarData.php
 
 	-
+		sniff: SlevomatCodingStandard.PHP.DisallowReference.DisallowedReturningReference
+		message: Returning reference is disallowed.
+		count: 1
+		path: src/Server/public/index.php
+
+	-
 		sniff: SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
 		message: Use of super global variable is disallowed.
 		count: 10
+		path: src/Server/public/index.php
+
+	-
+		sniff: Squiz.Commenting.FunctionComment.InvalidNoReturn
+		message: 'Function has no return statement, but annotation @return is present'
+		count: 1
 		path: src/Server/public/index.php
 
 	-

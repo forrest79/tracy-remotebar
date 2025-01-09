@@ -2,6 +2,8 @@
 
 use Forrest79\TracyRemoteBar\Server;
 use Tracy\Debugger;
+use Tracy\DeferredContent;
+use Tracy\SessionStorage;
 
 if (!@include_once __DIR__ . '/../../../../../autoload.php') { // intentionally @ - file may not exists in package development
 	assert(is_string($_SERVER['DOCUMENT_ROOT']));
@@ -64,7 +66,23 @@ switch (strtolower(trim($path, '/'))) {
 		exit;
 
 	case 'tracy-assets':
-		Debugger::getStrategy()->sendAssets();
+		(new DeferredContent(new class implements SessionStorage {
+
+			public function isAvailable(): bool
+			{
+				return FALSE;
+			}
+
+
+			/**
+			 * @return array<mixed>
+			 */
+			public function &getData(): array
+			{
+				throw new RuntimeException('Not implemented');
+			}
+
+		}))->sendAssets();
 		exit;
 }
 
