@@ -38,18 +38,14 @@ composer require --dev forrest79/tracy-remotebar
 
 Remote bars uses a running standalone HTTP server that collects bars and also have a simple HTML interface to show them.
 
-Classic Tracy can't handle this, so there is a little bit of hacking. Two files from the original Tracy are changed (and saved in `/tmp`) and loaded instead of
-the original one. This is made with Composer files autoloading, and this package needs to be autoloaded before Tracy, and it is, because the package name
-`Forrest79\Tracy-RemoteBar` is in the alphabet before `Tracy\Tracy`. Also, there can't be `require: Tracy\Tracy` in our `composer.json`, this will load original Tracy
-before our package.
+Classic Tracy can't handle this, so there is a little bit of hacking (to use private functions) and code coping from the original Tracy.
 
-> I'm not updating Tracy files directly in the `vendor` directory because of the projects with commited vendor.
+By enabling this extension, bars on the original Tracy are disabled. Then bar HTML is collected in the separated shutdown handler
+and send to the server where it is saved to the file and simple client loads HTML this files, and renders it to the separate iframes. 
 
-HTML of bars is collected and send to the server where it is saved to the file and simple client loads HTML this files, and renders it to the separate iframes. 
+This package should only be in the `require-dev` section, so on the production, you still have the original Tracy.
 
-This package should be only in `require-dev` section, so on the production, you still have the original Tracy.
-
-> I hope the original Tracy will be updated in a way, that this hack will be no longer needed...
+> There is created directory `tracy-remote-bar` in your system temp directory, where the HTML is saved.
 
 
 ## How to use it?
@@ -96,17 +92,20 @@ extensions:
     tracyRemoteBar: Forrest79\TracyRemoteBar\Bridges\Nette\TracyRemoteBarExtension
 
 tracyRemoteBar:
+    enabled: true # default is false
     serverUrl: http://127.0.0.1:7979 # or http://tracy.test
+    #curlConnectTimeout: 1 # default value
+    #curlTimeout: 1 # default value
 ```
 
 And that's it. Refresh your app page or run something from the cli, and you should see bar in the client page.
 
-If not, there is a log file `tracy-remote-bar` in your logs directory, where you can see what is wrong.
+If not, there is a log file `tracy-remote-bar` in your logs directory, where you can see what goes wrong.
 
 You can also activate remote rendering manually:
 
 ```php
-Forrest79\TracyRemoteBar\Remote::setServerUrl('http://127.0.0.1:7979'); // or http://tracy.test
+Forrest79\TracyRemoteBar\Remote::enable('http://127.0.0.1:7979'); // or http://tracy.test
 ``` 
 
 And there are also some useful methods:
