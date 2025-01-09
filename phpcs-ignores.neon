@@ -108,12 +108,6 @@ ignoreErrors:
 		path: src/Server/public/index.php
 
 	-
-		sniff: SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal
-		message: All classes should be declared using either the "abstract" or "final" keyword.
-		count: 1
-		path: src/Tracy/DevelopmentStrategy.php
-
-	-
 		sniff: Generic.PHP.ForbiddenFunctions.Found
 		message: 'The use of function bdump() is forbidden'
 		count: 1

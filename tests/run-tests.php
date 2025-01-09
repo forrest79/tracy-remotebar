@@ -11,7 +11,7 @@ if (exec('(cd ' . __DIR__ . ' && ./test-cli-request.php)', $output, $exitCode) =
 }
 
 if (!is_file($tracyLogFile)) {
-	echo 'There is no tracy-remote-bar.log file, Tracy is probably not correctly patched.' . PHP_EOL;
+	echo 'There is no tracy-remote-bar.log file.' . PHP_EOL;
 	exit(2);
 }
 

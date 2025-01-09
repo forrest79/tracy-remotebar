@@ -51,17 +51,73 @@ class Remote
 	}
 
 
-	public static function send(string $html): void
+	public static function dispatchBars(): void
 	{
-		if (!self::isEnabled()) {
-			return;
+		if (self::isEnabled()) {
+			Debugger::removeOutputBuffers(FALSE);
+			self::sendBar();
 		}
+	}
+
+
+	private static function sendBar(): void
+	{
+		try {
+			self::send(self::fixBarHtml(Helpers::capture(function (): void {
+				if (Helper::isHttpAjax()) {
+					$type = 'ajax';
+				} elseif (Helpers::isCli()) {
+					$type = 'cli';
+				} elseif (Helpers::isRedirect()) {
+					$type = 'redirect';
+				} else {
+					$type = 'main';
+				}
+
+				$content = (fn (): array => $this->renderPartial($type))->call(Debugger::getBar());
+				assert(is_string($content['bar']) && is_string($content['panels']));
+
+				$content = '<div id=tracy-debug-bar>' . $content['bar'] . '</div>' . $content['panels'];
+
+				$requestId = '';
+				$nonceAttr = Helpers::getNonceAttr();
+				$async = FALSE;
+
+				require Helper::classDir(Bar::class) . '/assets/loader.phtml';
+			})));
+		} catch (\Throwable $e) {
+			Debugger::exceptionHandler($e);
+		}
+	}
+
+
+	private static function fixBarHtml(string $html): string
+	{
+		$html = preg_replace('# src=\"(.)+_tracy_bar=#', ' src="/tracy-assets/?_tracy_bar=', $html); // correct assets URL
+		assert($html !== NULL);
+		$html = str_replace('<li><a href=\\"#\\" data-tracy-action=\\"close\\" title=\\"close debug bar\\">&times;</a></li>', '', $html); // hide close button
+		return str_replace(' data-tracy-group=\\"cli\\">', ' data-tracy-group=\\"cli\\"><li>CLI</li>', $html); // add missing cli info
+	}
+
+
+	private static function sendBluescreen(string $file): void
+	{
+		if (is_file($file)) {
+			$html = file_get_contents($file);
+			if ($html !== FALSE) {
+				self::send($html);
+			}
+		}
+	}
+
+
+	private static function send(string $html): void
+	{
+		$html = trim($html);
 
 		assert(self::$serverUrl !== NULL);
 
 		$ch = curl_init();
-
-		$html = self::fixBarHtml($html);
 
 		curl_setopt($ch, CURLOPT_URL, rtrim(self::$serverUrl, '/') . '/api/');
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -85,67 +141,6 @@ class Remote
 				Debugger::log('# HTTP code ' . $httpCode . ' was returned.', 'tracy-remote-bar');
 			}
 		}
-	}
-
-
-	public static function dispatchBars(): void
-	{
-		if (self::isEnabled()) {
-			Debugger::removeOutputBuffers(FALSE);
-			self::sendBar();
-		}
-	}
-
-
-	private static function sendBar(): void
-	{
-		try {
-			self::send(Helpers::capture(function (): void {
-				if (Helper::isHttpAjax()) {
-					$type = 'ajax';
-				} elseif (Helpers::isCli()) {
-					$type = 'cli';
-				} elseif (Helpers::isRedirect()) {
-					$type = 'redirect';
-				} else {
-					$type = 'main';
-				}
-
-				$content = (fn (): array => $this->renderPartial($type))->call(Debugger::getBar());
-				assert(is_string($content['bar']) && is_string($content['panels']));
-
-				$content = '<div id=tracy-debug-bar>' . $content['bar'] . '</div>' . $content['panels'];
-
-				$requestId = '';
-				$nonceAttr = Helpers::getNonceAttr();
-				$async = FALSE;
-
-				require Helper::classDir(Bar::class) . '/assets/loader.phtml';
-			}));
-		} catch (\Throwable $e) {
-			Debugger::exceptionHandler($e);
-		}
-	}
-
-
-	private static function sendBluescreen(string $file): void
-	{
-		if (is_file($file)) {
-			$html = file_get_contents($file);
-			if ($html !== FALSE) {
-				self::send($html);
-			}
-		}
-	}
-
-
-	private static function fixBarHtml(string $html): string
-	{
-		$html = preg_replace('# src=\"(.)+_tracy_bar=#', ' src="/tracy-assets/?_tracy_bar=', $html); // correct assets URL
-		assert($html !== NULL);
-		$html = str_replace('<li><a href=\\"#\\" data-tracy-action=\\"close\\" title=\\"close debug bar\\">&times;</a></li>', '', $html); // hide close button
-		$html = str_replace(' data-tracy-group=\\"cli\\">', ' data-tracy-group=\\"cli\\"><li>CLI</li>', $html); // add missing cli info
-		return trim($html);
 	}
 
 }

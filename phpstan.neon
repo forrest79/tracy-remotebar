@@ -7,7 +7,6 @@ parameters:
 	excludePaths:
 		- example/app/temp
 		- example/app/vendor
-		- src/Tracy/DevelopmentStrategy.php # because of extending final class
 		- tests/temp
 
 	ignoreErrors:
