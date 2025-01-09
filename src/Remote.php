@@ -2,7 +2,9 @@
 
 namespace Forrest79\TracyRemoteBar;
 
+use Tracy\Bar;
 use Tracy\Debugger;
+use Tracy\Helpers;
 
 class Remote
 {
@@ -16,6 +18,16 @@ class Remote
 	public static function enable(string $serverUrl): void
 	{
 		self::$serverUrl = $serverUrl;
+
+		Debugger::$showBar = FALSE;
+
+		register_shutdown_function(static function (): void {
+			if (function_exists('ini_set')) {
+				ini_set('display_errors', '1');
+			}
+
+			self::renderBar();
+		});
 	}
 
 
@@ -83,11 +95,39 @@ class Remote
 	{
 		if (self::isEnabled()) {
 			Debugger::removeOutputBuffers(FALSE);
-			try {
-				Debugger::getStrategy()->renderBar();
-			} catch (\Throwable $e) {
-				Debugger::exceptionHandler($e);
-			}
+			self::renderBar();
+		}
+	}
+
+
+	private static function renderBar(): void
+	{
+		try {
+			self::addBar(Helpers::capture(function (): void {
+
+				if (Helper::isHttpAjax()) {
+					$type = 'ajax';
+				} elseif (Helpers::isCli()) {
+					$type = 'cli';
+				} elseif (Helpers::isRedirect()) {
+					$type = 'redirect';
+				} else {
+					$type = 'main';
+				}
+
+				$content = (fn (): array => $this->renderPartial($type))->call(Debugger::getBar());
+				assert(is_string($content['bar']) && is_string($content['panels']));
+
+				$content = '<div id=tracy-debug-bar>' . $content['bar'] . '</div>' . $content['panels'];
+
+				$requestId = '';
+				$nonceAttr = Helpers::getNonceAttr();
+				$async = FALSE;
+
+				require Helper::classDir(Bar::class) . '/assets/loader.phtml';
+			}));
+		} catch (\Throwable $e) {
+			Debugger::exceptionHandler($e);
 		}
 	}
 

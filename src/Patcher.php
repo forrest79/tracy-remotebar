@@ -50,35 +50,24 @@ final class Patcher
 			throw new \RuntimeException('Can\'t find \'Debugger.php\' in Tracy package.');
 		}
 
-		$search1 = 'if (self::$showBar && !Helpers::isCli())';
+		$search1 = 'new DevelopmentStrategy(';
 		if (!str_contains($patchedDebuggerCode, $search1)) { // can't find where to put patch (new Tracy version?)
 			throw new \RuntimeException(sprintf('Can\'t find code "%s" in \'Debugger.php\'.', $search1));
 		}
 
 		$patchedDebuggerCode = str_replace(
 			$search1,
-			'if (self::$showBar && (!Helpers::isCli() || \\' . Remote::class . '::isEnabled()))',
-			$patchedDebuggerCode,
-		);
-
-		$search2 = 'new DevelopmentStrategy(';
-		if (!str_contains($patchedDebuggerCode, $search2)) { // can't find where to put patch (new Tracy version?)
-			throw new \RuntimeException(sprintf('Can\'t find code "%s" in \'Debugger.php\'.', $search2));
-		}
-
-		$patchedDebuggerCode = str_replace(
-			$search2,
 			'new \\' . Tracy\DevelopmentStrategy::class . '(',
 			$patchedDebuggerCode,
 		);
 
-		$search3 = 'require_once dirname(__DIR__) . "/$path.php";';
-		if (!str_contains($patchedDebuggerCode, $search3)) { // can't find where to put patch (new Tracy version?)
-			throw new \RuntimeException(sprintf('Can\'t find code "%s" in \'Debugger.php\'.', $search3));
+		$search2 = 'require_once dirname(__DIR__) . "/$path.php";';
+		if (!str_contains($patchedDebuggerCode, $search2)) { // can't find where to put patch (new Tracy version?)
+			throw new \RuntimeException(sprintf('Can\'t find code "%s" in \'Debugger.php\'.', $search2));
 		}
 
 		file_put_contents($patchedFile, str_replace(
-			$search3,
+			$search2,
 			'require_once "' . realpath($appDir . '/vendor/tracy/tracy/src/Tracy') . '/$path.php";',
 			$patchedDebuggerCode,
 		));

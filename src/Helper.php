@@ -5,6 +5,12 @@ namespace Forrest79\TracyRemoteBar;
 class Helper
 {
 
+	public static function isHttpAjax(): bool
+	{
+		return ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest';
+	}
+
+
 	/**
 	 * @param class-string $class
 	 */
