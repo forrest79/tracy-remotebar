@@ -4,3 +4,5 @@ extensions:
 tracyRemoteBar:
 	enabled: true
 	serverUrl: 'http://255.254.253.252:7980' # non-existing server URL
+	curlConnectTimeout: 2
+	curlTimeout: 2

@@ -37,10 +37,10 @@ class Remote
 	}
 
 
-	public static function setCurlTimeouts(int $connectTimeout, int $timeout): void
+	public static function setCurlTimeouts(int|NULL $connectTimeout, int|NULL $timeout): void
 	{
-		self::$curlConnectTimeout = $connectTimeout;
-		self::$curlTimeout = $timeout;
+		self::$curlConnectTimeout = $connectTimeout ?? self::$curlConnectTimeout;
+		self::$curlTimeout = $timeout ?? self::$curlTimeout;
 	}
 
 

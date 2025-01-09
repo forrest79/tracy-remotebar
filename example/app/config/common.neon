@@ -18,3 +18,4 @@ services:
 tracyRemoteBar:
 	enabled: true
 	serverUrl: %remoteServerUrl%
+	curlTimeout: 2
