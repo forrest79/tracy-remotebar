@@ -26,7 +26,14 @@ class Remote
 				ini_set('display_errors', '1');
 			}
 
-			self::renderBar();
+			self::sendBar();
+
+			foreach (headers_list() as $header) {
+				if (str_starts_with($header, 'X-Tracy-Error-Log:')) {
+					self::sendBluescreen(substr($header, 19));
+					break;
+				}
+			}
 		});
 	}
 
@@ -44,7 +51,7 @@ class Remote
 	}
 
 
-	public static function addBar(string $html): void
+	public static function send(string $html): void
 	{
 		if (!self::isEnabled()) {
 			return;
@@ -85,15 +92,15 @@ class Remote
 	{
 		if (self::isEnabled()) {
 			Debugger::removeOutputBuffers(FALSE);
-			self::renderBar();
+			self::sendBar();
 		}
 	}
 
 
-	private static function renderBar(): void
+	private static function sendBar(): void
 	{
 		try {
-			self::addBar(Helpers::capture(function (): void {
+			self::send(Helpers::capture(function (): void {
 				if (Helper::isHttpAjax()) {
 					$type = 'ajax';
 				} elseif (Helpers::isCli()) {
@@ -117,6 +124,17 @@ class Remote
 			}));
 		} catch (\Throwable $e) {
 			Debugger::exceptionHandler($e);
+		}
+	}
+
+
+	private static function sendBluescreen(string $file): void
+	{
+		if (is_file($file)) {
+			$html = file_get_contents($file);
+			if ($html !== FALSE) {
+				self::send($html);
+			}
 		}
 	}
 
