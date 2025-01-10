@@ -106,7 +106,9 @@ You can also activate remote rendering manually:
 
 ```php
 Forrest79\TracyRemoteBar\Remote::enable('http://127.0.0.1:7979'); // or http://tracy.test
-``` 
+```
+
+> `Tracy\Debugger` must be enabled before `Forrest79\TracyRemoteBar\Remote::enable()` is call, otherwise enabling is ignored. 
 
 And there are also some useful methods:
 

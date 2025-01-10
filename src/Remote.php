@@ -17,6 +17,10 @@ class Remote
 
 	public static function enable(string $serverUrl): void
 	{
+		if (!Debugger::isEnabled()) {
+			return;
+		}
+
 		self::$serverUrl = $serverUrl;
 
 		Debugger::$showBar = FALSE;
