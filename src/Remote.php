@@ -26,10 +26,6 @@ class Remote
 		Debugger::$showBar = FALSE;
 
 		register_shutdown_function(static function (): void {
-			if (function_exists('ini_set')) {
-				ini_set('display_errors', '1');
-			}
-
 			self::sendBar();
 
 			foreach (headers_list() as $header) {
@@ -66,6 +62,10 @@ class Remote
 
 	private static function sendBar(): void
 	{
+		if (function_exists('ini_set')) {
+			ini_set('display_errors', '1');
+		}
+
 		try {
 			self::send(self::fixBarHtml(Helpers::capture(function (): void {
 				if (Helper::isHttpAjax()) {
