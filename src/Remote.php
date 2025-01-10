@@ -119,10 +119,9 @@ class Remote
 	{
 		$html = trim($html);
 
-		assert(self::$serverUrl !== NULL);
-
 		$ch = curl_init();
 
+		assert(self::$serverUrl !== NULL);
 		curl_setopt($ch, CURLOPT_URL, rtrim(self::$serverUrl, '/') . '/api/');
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $html);
