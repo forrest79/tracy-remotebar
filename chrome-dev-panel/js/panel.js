@@ -1,13 +1,11 @@
 let url = '';
 
 const onSuccess = () => {
-	console.log('onSuccess');
 	serverUrlDiv.classList.add('ok');
 	serverUrlDiv.classList.remove('error');
 };
 
 const onError = () => {
-	console.log('onError');
 	serverUrlDiv.classList.add('error');
 	serverUrlDiv.classList.remove('ok');
 };
