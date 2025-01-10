@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const addNewBar = (id) => {
 		const iframe = document.createElement('iframe');
+		iframe.setAttribute('id', 'iframe-' + id);
 		iframe.setAttribute('src', url + '/api/?id=' + id);
 
 		bars.prepend(iframe);
@@ -97,19 +98,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	document.addEventListener('click', (event) => {
 		if (event.target.tagName === 'IFRAME') {
-			document.querySelectorAll('iframe').forEach((el) => {
-				if (el === event.target) {
-					if (el.classList.contains('locked')) {
-						el.classList.remove('locked');
-					} else {
-						el.classList.add('locked');
-						el.classList.add('big');
-					}
-				} else {
-					el.classList.remove('locked');
-					el.classList.remove('big');
-				}
-			});
+			window.lockIframe(event.target.getAttribute('id').substring(7)); // iframe-
 		}
 	});
+
+	window.lockIframe = function (id) {
+		const lockedIframe = document.getElementById('iframe-' + id);
+		document.querySelectorAll('iframe').forEach((el) => {
+			if (el === lockedIframe) {
+				if (el.classList.contains('locked')) {
+					el.classList.remove('locked');
+				} else {
+					el.classList.add('locked');
+					el.classList.add('big');
+				}
+			} else {
+				el.classList.remove('locked');
+				el.classList.remove('big');
+			}
+		});
+		console.log(id);
+	};
 });

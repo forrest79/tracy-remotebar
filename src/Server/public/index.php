@@ -42,13 +42,14 @@ switch (strtolower(trim($path, '/'))) {
 			}
 		} else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 			if (isset($_GET['id'])) {
-				assert(is_string($_GET['id']));
+				$id = $_GET['id'];
+				assert(is_string($id));
 
-				$html = $barData->getBar((int) $_GET['id']);
+				$html = $barData->getBar((int) $id);
 				if ($html === NULL) {
 					http_response_code(403);
 				} else {
-					echo $html;
+					echo $html . '<script>document.addEventListener(\'click\', function () { window.parent.lockIframe(' . $id . ');})</script>';
 				}
 			} else {
 				echo $barData->barIdRange();
