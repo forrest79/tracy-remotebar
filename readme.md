@@ -12,7 +12,7 @@ Remote bar renders Tracy bars not to a web page but to a separate browser tab or
 
 Benefits:
 - you can see Tracy bar from non-HTML request (API)
-- you can see Tracy bar for cli
+- you can see Tracy bar for cli (even tests)
 - you can see old Tracy bar
 - exceptions in AJAX calls are also rendered remotely, and you can still use the source page without refreshing it
 
@@ -58,26 +58,27 @@ This is the sample configuration for nginx:
 
 ```
 server {
-        listen 80;
+    listen 80;
 
-        server_name tracy.test;
+    server_name tracy.test;
 
-        root <...>/vendor/forrest79/tracy-remotebar/src/Server/public;
-        index index.php;
+    root <...>/vendor/forrest79/tracy-remotebar/src/Server/public;
 
-        client_max_body_size 100M;
+    index index.php;
 
-        location / {
-                try_files $uri $uri/ /index.php$is_args$args;
-        }
+    client_max_body_size 100M;
 
-        location ~* \.php$ {
-                include snippets/fastcgi-php.conf;
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
 
-                fastcgi_pass 127.0.0.1:9000;
-                fastcgi_param DOCUMENT_ROOT $document_root;
-                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        }
+    location ~* \.php$ {
+        include snippets/fastcgi-php.conf;
+
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_param DOCUMENT_ROOT $document_root;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
 }
 ```
 
@@ -143,25 +144,23 @@ Sample nginx configuration for host `tracy.app.test` (use the correct `root` pat
 
 ```
 server {
-	listen 80;
+    listen 80;
 
-	server_name tracy.app.test;
+    server_name tracy.app.test;
 
-	root <...>/example/app/public;
+    root <...>/example/app/public;
 
-	index index.php;
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
 
-	location / {
-		try_files $uri $uri/ /index.php$is_args$args;
-	}
+    location ~* \.php$ {
+        include snippets/fastcgi-php.conf;
 
-	location ~* \.php$ {
-		include snippets/fastcgi-php.conf;
-
-		fastcgi_pass 127.0.0.1:9000;
-		fastcgi_param DOCUMENT_ROOT $document_root;
-		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-	}
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_param DOCUMENT_ROOT $document_root;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
 }
 ```
 
