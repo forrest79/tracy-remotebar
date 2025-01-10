@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
 use Forrest79\TracyRemoteBar\Server;
-use Tracy\Debugger;
 use Tracy\DeferredContent;
 use Tracy\SessionStorage;
 
@@ -49,9 +48,6 @@ switch (strtolower(trim($path, '/'))) {
 				if ($html === NULL) {
 					http_response_code(403);
 				} else {
-					if (Debugger::getStrategy()->sendAssets()) {
-						return;
-					}
 					echo $html;
 				}
 			} else {
