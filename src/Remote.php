@@ -137,12 +137,22 @@ class Remote
 
 		curl_exec($ch);
 
+		$error = NULL;
+
 		if (curl_errno($ch) !== CURLE_OK) {
-			Debugger::log('#' . curl_errno($ch) . ': ' . curl_error($ch), 'tracy-remote-bar');
+			$error = '#' . curl_errno($ch) . ': ' . curl_error($ch);
 		} else {
 			$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			if ($httpCode !== 200) {
-				Debugger::log('# HTTP code ' . $httpCode . ' was returned.', 'tracy-remote-bar');
+				$error = '# HTTP code ' . $httpCode . ' was returned.';
+			}
+		}
+
+		if ($error !== NULL) {
+			if (Debugger::$logDirectory === NULL) {
+				echo $error . PHP_EOL;
+			} else {
+				file_put_contents(Debugger::$logDirectory . '/tracy-remote-bar.log', date('[Y-m-d H-i-s]') . ' ' . $error . PHP_EOL, FILE_APPEND);
 			}
 		}
 	}

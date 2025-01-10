@@ -100,7 +100,7 @@ tracyRemoteBar:
 
 And that's it. Refresh your app page or run something from the cli, and you should see bar in the client page.
 
-If not, there is a log file `tracy-remote-bar` in your logs directory, where you can see what goes wrong.
+If not, there is a log file `tracy-remote-bar.log` in your logs directory (if it's set on `Tracy\Debugger::logsDir`, otherwise simple `echo` is used), where you can see what goes wrong.
 
 You can also activate remote rendering manually:
 
