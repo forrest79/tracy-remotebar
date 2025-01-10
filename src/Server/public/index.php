@@ -49,7 +49,7 @@ switch (strtolower(trim($path, '/'))) {
 				if ($html === NULL) {
 					http_response_code(403);
 				} else {
-					echo $html . '<script>document.addEventListener(\'click\', function () { window.parent.lockIframe(' . $id . ');})</script>';
+					echo $html . '<script>document.addEventListener(\'click\', function () { window.parent.postMessage(' . $id . ', \'*\');})</script>';
 				}
 			} else {
 				echo $barData->barIdRange();

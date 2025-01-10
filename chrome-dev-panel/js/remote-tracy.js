@@ -96,13 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// --- //
 
-	document.addEventListener('click', (event) => {
-		if (event.target.tagName === 'IFRAME') {
-			window.lockIframe(event.target.getAttribute('id').substring(7)); // iframe-
-		}
-	});
-
-	window.lockIframe = function (id) {
+	const lockIframe = function (id) {
 		const lockedIframe = document.getElementById('iframe-' + id);
 		document.querySelectorAll('iframe').forEach((el) => {
 			if (el === lockedIframe) {
@@ -117,6 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
 				el.classList.remove('big');
 			}
 		});
-		console.log(id);
 	};
+
+	document.addEventListener('click', (event) => {
+		if (event.target.tagName === 'IFRAME') {
+			lockIframe(event.target.getAttribute('id').substring(7)); // iframe-
+		}
+	});
+
+	window.addEventListener('message', event => {
+		lockIframe(event.data);
+	});
 });
