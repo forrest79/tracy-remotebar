@@ -98,7 +98,7 @@ ignoreErrors:
 	-
 		sniff: SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
 		message: Use of super global variable is disallowed.
-		count: 9
+		count: 10
 		path: src/Server/public/index.php
 
 	-

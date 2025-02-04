@@ -13,6 +13,28 @@ if (!@include_once __DIR__ . '/../../../../../autoload.php') { // intentionally 
 	include_once substr($_SERVER['DOCUMENT_ROOT'], 0, $vendorPosition + 7) . '/autoload.php';
 }
 
+if (isset($_GET['_tracy_bar'])) {
+	(new DeferredContent(new class implements SessionStorage {
+
+		public function isAvailable(): bool
+		{
+			return FALSE;
+		}
+
+
+		/**
+		 * @return array<mixed>
+		 */
+		public function &getData(): array
+		{
+			throw new RuntimeException('Not implemented');
+		}
+
+	}))->sendAssets();
+
+	exit;
+}
+
 ini_set('memory_limit', '1024M');
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? 'not-found';
@@ -60,26 +82,6 @@ switch (strtolower(trim($path, '/'))) {
 
 		$barData->write();
 
-		exit;
-
-	case 'tracy-assets':
-		(new DeferredContent(new class implements SessionStorage {
-
-			public function isAvailable(): bool
-			{
-				return FALSE;
-			}
-
-
-			/**
-			 * @return array<mixed>
-			 */
-			public function &getData(): array
-			{
-				throw new RuntimeException('Not implemented');
-			}
-
-		}))->sendAssets();
 		exit;
 }
 
