@@ -6,7 +6,7 @@ use Forrest79\TracyRemoteBar\Helper;
 
 class BarData
 {
-	private const MAX_SAVED_BAR_COUNT = 20;
+	private const MAX_SAVED_BAR_COUNT = 10;
 
 	private const DATA_FILE = 'bars.json';
 	private const LOCK_FILE = 'bars.json.lock';
