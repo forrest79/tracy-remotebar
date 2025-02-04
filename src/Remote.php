@@ -8,6 +8,8 @@ use Tracy\Helpers;
 
 class Remote
 {
+	private static bool $enabled = FALSE;
+
 	private static string|NULL $serverUrl = NULL;
 
 	private static int $curlConnectTimeout = 1;
@@ -15,11 +17,13 @@ class Remote
 	private static int $curlTimeout = 1;
 
 
-	public static function enable(string $serverUrl): void
+	public static function enable(string|NULL $serverUrl): void
 	{
 		if (!Debugger::isEnabled()) {
 			return;
 		}
+
+		self::$enabled = TRUE;
 
 		self::$serverUrl = $serverUrl;
 
@@ -40,7 +44,7 @@ class Remote
 
 	public static function isEnabled(): bool
 	{
-		return self::$serverUrl !== NULL;
+		return self::$enabled;
 	}
 
 
@@ -117,38 +121,41 @@ class Remote
 	{
 		$html = trim($html);
 
-		$ch = curl_init();
-
-		assert(self::$serverUrl !== NULL);
-		curl_setopt($ch, CURLOPT_URL, rtrim(self::$serverUrl, '/') . '/api/');
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $html);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$curlConnectTimeout);
-		curl_setopt($ch, CURLOPT_TIMEOUT, self::$curlTimeout);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
-			'Content-Type: text/plain',
-			'Content-Length: ' . strlen($html),
-		]);
-
-		curl_exec($ch);
-
-		$error = NULL;
-
-		if (curl_errno($ch) !== CURLE_OK) {
-			$error = '#' . curl_errno($ch) . ': ' . curl_error($ch);
+		if (self::$serverUrl === NULL) {
+			Server\BarData::saveNewBar($html);
 		} else {
-			$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			if ($httpCode !== 200) {
-				$error = '# HTTP code ' . $httpCode . ' was returned.';
-			}
-		}
+			$ch = curl_init();
 
-		if ($error !== NULL) {
-			if (Debugger::$logDirectory === NULL) {
-				echo $error . PHP_EOL;
+			curl_setopt($ch, CURLOPT_URL, rtrim(self::$serverUrl, '/') . '/api/');
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $html);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$curlConnectTimeout);
+			curl_setopt($ch, CURLOPT_TIMEOUT, self::$curlTimeout);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, [
+				'Content-Type: text/plain',
+				'Content-Length: ' . strlen($html),
+			]);
+
+			curl_exec($ch);
+
+			$error = NULL;
+
+			if (curl_errno($ch) !== CURLE_OK) {
+				$error = '#' . curl_errno($ch) . ': ' . curl_error($ch);
 			} else {
-				file_put_contents(Debugger::$logDirectory . '/tracy-remote-bar.log', date('[Y-m-d H-i-s]') . ' ' . $error . PHP_EOL, FILE_APPEND);
+				$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				if ($httpCode !== 200) {
+					$error = '# HTTP code ' . $httpCode . ' was returned.';
+				}
+			}
+
+			if ($error !== NULL) {
+				if (Debugger::$logDirectory === NULL) {
+					echo $error . PHP_EOL;
+				} else {
+					file_put_contents(Debugger::$logDirectory . '/tracy-remote-bar.log', date('[Y-m-d H-i-s]') . ' ' . $error . PHP_EOL, FILE_APPEND);
+				}
 			}
 		}
 	}

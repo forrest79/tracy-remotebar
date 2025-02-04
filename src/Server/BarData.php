@@ -94,4 +94,13 @@ class BarData
 		return self::$dir;
 	}
 
+
+	public static function saveNewBar(string $bar): void
+	{
+		$barData = new self();
+		$barData->load();
+		$barData->addBar($bar);
+		$barData->write();
+	}
+
 }

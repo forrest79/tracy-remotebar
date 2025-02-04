@@ -94,10 +94,12 @@ extensions:
 
 tracyRemoteBar:
     enabled: true # default is false
-    serverUrl: http://127.0.0.1:7979 # or http://tracy.test
+    serverUrl: http://127.0.0.1:7979 # or http://tracy.test or null
     #curlConnectTimeout: 1 # default value
     #curlTimeout: 1 # default value
 ```
+
+> If you're running your app and Tracy RemoveBar server on the same "filesystem", you can set `serverUrl` to NULL and then bars are directly saved to the data file and not transmitted via local network. 
 
 And that's it. Refresh your app page or run something from the cli, and you should see bar in the client page.
 

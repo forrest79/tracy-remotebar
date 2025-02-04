@@ -13,7 +13,7 @@ class TracyRemoteBarExtension extends Nette\DI\CompilerExtension
 	{
 		return Expect::structure([
 			'enabled' => Expect::bool(FALSE)->dynamic(),
-			'serverUrl' => Expect::string()->required()->dynamic(),
+			'serverUrl' => Expect::string()->nullable()->dynamic(),
 			'curlConnectTimeout' => Expect::int()->dynamic(),
 			'curlTimeout' => Expect::int()->dynamic(),
 		]);
