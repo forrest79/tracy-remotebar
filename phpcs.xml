@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <ruleset name="Tracy-RemoteBar">
-	<rule ref="./vendor/forrest79/phpcs/Forrest79CodingStandard/ruleset.xml"/>
+	<rule ref="./vendor/forrest79/phpcs/Forrest79CodingStandard/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.TypeHints.ClassConstantTypeHint.MissingNativeTypeHint"/><!-- PHP 8.3+ -->
+	</rule>
 
 	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
 		<exclude-pattern>tests/*</exclude-pattern>
@@ -8,11 +10,11 @@
 
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
-			<property name="rootNamespaces" type="array" value="
-				src=>Forrest79\TracyRemoteBar,
-				tests=>Forrest79\TracyRemoteBar\Tests,
-				example/app/src=>App,
-			"/>
+			<property name="rootNamespaces" type="array">
+				<element key="src" value="Forrest79\TracyRemoteBar"/>
+				<element key="tests" value="Forrest79\TracyRemoteBar\Tests"/>
+				<element key="example/app/src" value="App"/>
+			</property>
 		</properties>
 	</rule>
 </ruleset>
