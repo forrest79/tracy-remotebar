@@ -120,9 +120,12 @@ class Remote
 	private static function send(string $html): void
 	{
 		$html = trim($html);
+		$error = NULL;
 
 		if (self::$serverUrl === NULL) {
 			Server\BarData::saveNewBar($html);
+		} else if (!extension_loaded('curl')) {
+			$error = 'curl extension must be installed and loaded or you can use set \'serverUrl\' as NULL to save bar directly into the /tmp file (TracyRemoteBar client application must run on the same server as the application in this case).';
 		} else {
 			$ch = curl_init();
 
@@ -139,8 +142,6 @@ class Remote
 
 			curl_exec($ch);
 
-			$error = NULL;
-
 			if (curl_errno($ch) !== CURLE_OK) {
 				$error = '#' . curl_errno($ch) . ': ' . curl_error($ch);
 			} else {
@@ -149,13 +150,13 @@ class Remote
 					$error = '# HTTP code ' . $httpCode . ' was returned.';
 				}
 			}
+		}
 
-			if ($error !== NULL) {
-				if (Debugger::$logDirectory === NULL) {
-					echo $error . PHP_EOL;
-				} else {
-					file_put_contents(Debugger::$logDirectory . '/tracy-remote-bar.log', date('[Y-m-d H-i-s]') . ' ' . $error . PHP_EOL, FILE_APPEND);
-				}
+		if ($error !== NULL) {
+			if (Debugger::$logDirectory === NULL) {
+				echo $error . PHP_EOL;
+			} else {
+				file_put_contents(Debugger::$logDirectory . '/tracy-remote-bar.log', date('[Y-m-d H-i-s]') . ' ' . $error . PHP_EOL, FILE_APPEND);
 			}
 		}
 	}
