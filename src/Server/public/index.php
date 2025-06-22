@@ -7,7 +7,7 @@ use Tracy\SessionStorage;
 if (!@include_once __DIR__ . '/../../../../../autoload.php') { // intentionally @ - file may not exists in package development
 	assert(is_string($_SERVER['DOCUMENT_ROOT']));
 	$vendorPosition = strpos($_SERVER['DOCUMENT_ROOT'], '/vendor/');
-	if ($vendorPosition === FALSE) {
+	if ($vendorPosition === false) {
 		throw new RuntimeException('Unable to locate vendor directory');
 	}
 	include_once substr($_SERVER['DOCUMENT_ROOT'], 0, $vendorPosition + 7) . '/autoload.php';
@@ -18,7 +18,7 @@ if (isset($_GET['_tracy_bar'])) {
 
 		public function isAvailable(): bool
 		{
-			return FALSE;
+			return false;
 		}
 
 
@@ -59,7 +59,7 @@ switch (strtolower(trim($path, '/'))) {
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$barHtml = file_get_contents('php://input');
-			if ($barHtml !== FALSE) {
+			if ($barHtml !== false) {
 				$barData->addBar($barHtml);
 			}
 		} else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -68,7 +68,7 @@ switch (strtolower(trim($path, '/'))) {
 				assert(is_string($id));
 
 				$html = $barData->getBar((int) $id);
-				if ($html === NULL) {
+				if ($html === null) {
 					http_response_code(403);
 				} else {
 					echo $html . '<script>document.addEventListener(\'click\', function () { window.parent.postMessage(' . $id . ', \'*\');})</script>';

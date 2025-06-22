@@ -4,7 +4,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 App\Bootstrap::boot()->createContainer();
 
-while (TRUE) {
+while (true) {
 	echo date('H:i:s') . PHP_EOL;
 	bdump('Cli service request ' . date('H:i:s'));
 	Forrest79\TracyRemoteBar\Remote::dispatchBars();

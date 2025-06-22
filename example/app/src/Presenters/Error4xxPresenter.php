@@ -11,7 +11,7 @@ final class Error4xxPresenter extends BasePresenter
 	{
 		parent::startup();
 
-		if ($this->getRequest() !== NULL && !$this->getRequest()->isMethod(Nette\Application\Request::FORWARD)) {
+		if ($this->getRequest() !== null && !$this->getRequest()->isMethod(Nette\Application\Request::FORWARD)) {
 			$this->error();
 		}
 	}

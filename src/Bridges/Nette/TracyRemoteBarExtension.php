@@ -12,7 +12,7 @@ class TracyRemoteBarExtension extends Nette\DI\CompilerExtension
 	public function getConfigSchema(): Nette\Schema\Schema
 	{
 		return Expect::structure([
-			'enabled' => Expect::bool(FALSE)->dynamic(),
+			'enabled' => Expect::bool(false)->dynamic(),
 			'serverUrl' => Expect::string()->nullable()->dynamic(),
 			'curlConnectTimeout' => Expect::int()->dynamic(),
 			'curlTimeout' => Expect::int()->dynamic(),
@@ -32,7 +32,7 @@ class TracyRemoteBarExtension extends Nette\DI\CompilerExtension
 			$this->initialization->addBody(TracyRemoteBar\Remote::class . '::enable(?);', [$serverUrl]);
 
 			if (isset($config['curlConnectTimeout']) || isset($config['curlTimeout'])) {
-				$this->initialization->addBody(TracyRemoteBar\Remote::class . '::setCurlTimeouts(?, ?);', [$config['curlConnectTimeout'] ?? NULL, $config['curlTimeout'] ?? NULL]);
+				$this->initialization->addBody(TracyRemoteBar\Remote::class . '::setCurlTimeouts(?, ?);', [$config['curlConnectTimeout'] ?? null, $config['curlTimeout'] ?? null]);
 			}
 		}
 	}

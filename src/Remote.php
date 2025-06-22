@@ -8,26 +8,26 @@ use Tracy\Helpers;
 
 class Remote
 {
-	private static bool $enabled = FALSE;
+	private static bool $enabled = false;
 
-	private static string|NULL $serverUrl = NULL;
+	private static string|null $serverUrl = null;
 
 	private static int $curlConnectTimeout = 1;
 
 	private static int $curlTimeout = 1;
 
 
-	public static function enable(string|NULL $serverUrl): void
+	public static function enable(string|null $serverUrl): void
 	{
 		if (!Debugger::isEnabled()) {
 			return;
 		}
 
-		self::$enabled = TRUE;
+		self::$enabled = true;
 
 		self::$serverUrl = $serverUrl;
 
-		Debugger::$showBar = FALSE;
+		Debugger::$showBar = false;
 
 		register_shutdown_function(static function (): void {
 			self::sendBar();
@@ -48,7 +48,7 @@ class Remote
 	}
 
 
-	public static function setCurlTimeouts(int|NULL $connectTimeout, int|NULL $timeout): void
+	public static function setCurlTimeouts(int|null $connectTimeout, int|null $timeout): void
 	{
 		self::$curlConnectTimeout = $connectTimeout ?? self::$curlConnectTimeout;
 		self::$curlTimeout = $timeout ?? self::$curlTimeout;
@@ -58,7 +58,7 @@ class Remote
 	public static function dispatchBars(): void
 	{
 		if (self::isEnabled()) {
-			Debugger::removeOutputBuffers(FALSE);
+			Debugger::removeOutputBuffers(false);
 			self::sendBar();
 		}
 	}
@@ -82,14 +82,14 @@ class Remote
 					$type = 'main';
 				}
 
-				$content = (fn (): array => $this->renderPartial($type))->call(Debugger::getBar());
-				assert(is_string($content['bar']) && is_string($content['panels']));
+				$contentParent = (fn (): array => $this->renderPartial($type))->call(Debugger::getBar());
+				assert(is_string($contentParent['bar']) && is_string($contentParent['panels']));
 
-				$content = '<div id=tracy-debug-bar>' . $content['bar'] . '</div>' . $content['panels'];
+				$content = '<div id=tracy-debug-bar>' . $contentParent['bar'] . '</div>' . $contentParent['panels'];
 
 				$requestId = '';
 				$nonceAttr = Helpers::getNonceAttr();
-				$async = FALSE;
+				$async = false;
 
 				require Helper::classDir(Bar::class) . '/assets/loader.phtml';
 			})));
@@ -110,7 +110,7 @@ class Remote
 	{
 		if (is_file($file)) {
 			$html = file_get_contents($file);
-			if ($html !== FALSE) {
+			if ($html !== false) {
 				self::send($html);
 			}
 		}
@@ -120,19 +120,19 @@ class Remote
 	private static function send(string $html): void
 	{
 		$html = trim($html);
-		$error = NULL;
+		$error = null;
 
-		if (self::$serverUrl === NULL) {
+		if (self::$serverUrl === null) {
 			Server\BarData::saveNewBar($html);
 		} else if (!extension_loaded('curl')) {
-			$error = 'curl extension must be installed and loaded or you can use set \'serverUrl\' as NULL to save bar directly into the /tmp file (TracyRemoteBar client application must run on the same server as the application in this case).';
+			$error = 'curl extension must be installed and loaded or you can use set \'serverUrl\' as null to save bar directly into the /tmp file (TracyRemoteBar client application must run on the same server as the application in this case).';
 		} else {
 			$ch = curl_init();
 
 			curl_setopt($ch, CURLOPT_URL, rtrim(self::$serverUrl, '/') . '/api/');
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $html);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$curlConnectTimeout);
 			curl_setopt($ch, CURLOPT_TIMEOUT, self::$curlTimeout);
 			curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -152,8 +152,8 @@ class Remote
 			}
 		}
 
-		if ($error !== NULL) {
-			if (Debugger::$logDirectory === NULL) {
+		if ($error !== null) {
+			if (Debugger::$logDirectory === null) {
 				echo $error . PHP_EOL;
 			} else {
 				file_put_contents(Debugger::$logDirectory . '/tracy-remote-bar.log', date('[Y-m-d H-i-s]') . ' ' . $error . PHP_EOL, FILE_APPEND);

@@ -1,5 +1,6 @@
 includes:
 	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- vendor/shipmonk/phpstan-rules/rules.neon
 
 parameters:
 	level: max
@@ -23,7 +24,18 @@ parameters:
 			path: example/app/src/Presenters/HomepagePresenter.php
 
 		-
+			message: '#^Using \(array\) is discouraged, please avoid using that\.$#'
+			identifier: shipmonk.forbiddenCast
+			count: 1
+			path: src/Bridges/Nette/TracyRemoteBarExtension.php
+
+		-
 			message: '#^Property Forrest79\\TracyRemoteBar\\Server\\BarData\:\:\$data \(array\<int, string\>\) does not accept array\<mixed, mixed\>\.$#'
 			identifier: assign.propertyType
 			count: 1
 			path: src/Server/BarData.php
+
+	# temp - fatal error
+	shipmonkRules:
+		forbidCheckedExceptionInCallable:
+			enabled: false
