@@ -67,6 +67,12 @@ ignoreErrors:
 
 	-
 		sniff: SlevomatCodingStandard.Variables.UnusedVariable.UnusedVariable
+		message: Unused variable $content.
+		count: 1
+		path: src/Remote.php
+
+	-
+		sniff: SlevomatCodingStandard.Variables.UnusedVariable.UnusedVariable
 		message: Unused variable $nonceAttr.
 		count: 1
 		path: src/Remote.php

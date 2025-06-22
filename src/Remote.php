@@ -82,10 +82,10 @@ class Remote
 					$type = 'main';
 				}
 
-				$content = (fn (): array => $this->renderPartial($type))->call(Debugger::getBar());
-				assert(is_string($content['bar']) && is_string($content['panels']));
+				$contentParent = (fn (): array => $this->renderPartial($type))->call(Debugger::getBar());
+				assert(is_string($contentParent['bar']) && is_string($contentParent['panels']));
 
-				$content = '<div id=tracy-debug-bar>' . $content['bar'] . '</div>' . $content['panels'];
+				$content = '<div id=tracy-debug-bar>' . $contentParent['bar'] . '</div>' . $contentParent['panels'];
 
 				$requestId = '';
 				$nonceAttr = Helpers::getNonceAttr();
