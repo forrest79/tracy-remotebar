@@ -11,9 +11,9 @@
 		}
 	],
 	"require": {
-		"ext-curl": "^8.1",
+		"ext-curl": "^8.3",
 		"tracy/tracy": "^2.11",
-		"php": "^8.1"
+		"php": "^8.3"
 	},
 	"require-dev": {
 		"forrest79/phpcs": "^2.3",
