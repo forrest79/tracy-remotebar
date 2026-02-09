@@ -23,7 +23,7 @@ if (isset($_GET['_tracy_bar'])) {
 
 
 		/**
-		 * @return array<mixed>
+		 * @return array<string, mixed>
 		 */
 		public function &getData(): array
 		{
