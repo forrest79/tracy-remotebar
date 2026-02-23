@@ -88,10 +88,9 @@ class Remote
 				$content = '<div id=tracy-debug-bar>' . $contentParent['bar'] . '</div>' . $contentParent['panels'];
 
 				$requestId = '';
-				$nonceAttr = Helpers::getNonceAttr();
 				$async = false;
 
-				require Helper::classDir(Bar::class) . '/assets/loader.phtml';
+				require Helper::classDir(Bar::class) . '/dist/loader.phtml';
 			})));
 		} catch (\Throwable $e) {
 			Debugger::exceptionHandler($e);

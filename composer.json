@@ -12,7 +12,7 @@
 	],
 	"require": {
 		"ext-curl": "^8.3",
-		"tracy/tracy": "^2.11",
+		"tracy/tracy": "^2.11.2",
 		"php": "^8.3"
 	},
 	"require-dev": {
