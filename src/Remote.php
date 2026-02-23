@@ -23,9 +23,13 @@ class Remote
 			return;
 		}
 
-		self::$enabled = true;
-
 		self::$serverUrl = $serverUrl;
+
+		if (self::$enabled) {
+			return;
+		}
+
+		self::$enabled = true;
 
 		Debugger::$showBar = false;
 
