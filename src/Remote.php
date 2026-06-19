@@ -107,7 +107,7 @@ class Remote
 		$html = str_replace('<li><a href=\\"#\\" data-tracy-action=\\"close\\" title=\\"close debug bar\\">&times;</a></li>', '', $html); // hide close button
 
 		if (Helpers::isCli()) {
-			$html = str_replace(' data-tracy-group=\\"cli\\">', ' data-tracy-group=\\"cli\\"><li title=\\"' . str_replace('"', '\'', Helpers::getSource()) . '\\">CLI (PID: ' . getmypid() . ')</li>', $html); // add cli source
+			$html = str_replace(' data-tracy-group=\\"cli\\"\\u003E', ' data-tracy-group=\\"cli\\"\\u003E\\u003Cli title=\\"' . str_replace('"', '\'', Helpers::getSource()) . '\\"\\u003E&nbsp;CLI (PID: ' . getmypid() . ')\\u003C/li\\u003E', $html); // add cli source
 		}
 
 		return $html;
