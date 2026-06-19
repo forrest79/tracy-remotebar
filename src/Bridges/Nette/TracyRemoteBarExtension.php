@@ -28,12 +28,14 @@ class TracyRemoteBarExtension extends Nette\DI\CompilerExtension
 
 		assert(is_bool($enabled));
 
-		if ($enabled) {
-			$this->initialization->addBody(TracyRemoteBar\Remote::class . '::enable(?);', [$serverUrl]);
+		$this->initialization->addBody(TracyRemoteBar\Remote::class . '::register(?, ?, ?);', [
+			$serverUrl,
+			$config['curlConnectTimeout'] ?? null,
+			$config['curlTimeout'] ?? null,
+		]);
 
-			if (isset($config['curlConnectTimeout']) || isset($config['curlTimeout'])) {
-				$this->initialization->addBody(TracyRemoteBar\Remote::class . '::setCurlTimeouts(?, ?);', [$config['curlConnectTimeout'] ?? null, $config['curlTimeout'] ?? null]);
-			}
+		if (!$enabled) {
+			$this->initialization->addBody(TracyRemoteBar\Remote::class . '::disable();');
 		}
 	}
 

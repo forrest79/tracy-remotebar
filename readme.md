@@ -108,15 +108,18 @@ If not, there is a log file `tracy-remote-bar.log` in your logs directory (if it
 You can also activate remote rendering manually:
 
 ```php
-Forrest79\TracyRemoteBar\Remote::enable('http://127.0.0.1:7979'); // or http://tracy.test
+Forrest79\TracyRemoteBar\Remote::register('http://127.0.0.1:7979'); // or http://tracy.test
+// optionally pass cURL timeouts as 2nd and 3rd argument (connect timeout, timeout)
+Forrest79\TracyRemoteBar\Remote::register('http://127.0.0.1:7979', 2, 5);
 ```
 
-> `Tracy\Debugger` must be enabled before `Forrest79\TracyRemoteBar\Remote::enable()` is call, otherwise enabling is ignored. 
+> `Tracy\Debugger` must be enabled before `Forrest79\TracyRemoteBar\Remote::register()` is called, otherwise registration is ignored.
 
 And there are also some useful methods:
 
 ```php
-Forrest79\TracyRemoteBar\Remote::setCurlTimeouts(...); // if your server is slow, you can adjust cURL timeouts...
+Forrest79\TracyRemoteBar\Remote::enable(); // re-enable remote bar (e.g. after calling disable())
+Forrest79\TracyRemoteBar\Remote::disable(); // disable remote bar and restore the standard Tracy bar - can be called and reversed multiple times during one request
 Forrest79\TracyRemoteBar\Remote::dispatchBars(); // this is usefull for long running services in cli - calling this immediately send bars to the server and you can do it many times during one execution (just be aware that some bars can grow because they are not reset)
 ```
 

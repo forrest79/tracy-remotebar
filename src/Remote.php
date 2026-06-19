@@ -10,6 +10,8 @@ class Remote
 {
 	private static bool $enabled = false;
 
+	private static bool $registered = false;
+
 	private static string|null $serverUrl = null;
 
 	private static int $curlConnectTimeout = 1;
@@ -17,23 +19,21 @@ class Remote
 	private static int $curlTimeout = 1;
 
 
-	public static function enable(string|null $serverUrl): void
+	public static function register(
+		string|null $serverUrl,
+		int|null $curlConnectTimeout = null,
+		int|null $curlTimeout = null,
+	): void
 	{
-		if (!Debugger::isEnabled()) {
+		if (!Debugger::isEnabled() && self::$registered) {
 			return;
 		}
-
-		self::$serverUrl = $serverUrl;
-
-		if (self::$enabled) {
-			return;
-		}
-
-		self::$enabled = true;
-
-		Debugger::$showBar = false;
 
 		register_shutdown_function(static function (): void {
+			if (!self::isEnabled()) {
+				return;
+			}
+
 			self::sendBar();
 
 			foreach (headers_list() as $header) {
@@ -43,19 +43,36 @@ class Remote
 				}
 			}
 		});
+
+		self::$serverUrl = $serverUrl;
+		self::$curlConnectTimeout = $curlConnectTimeout ?? self::$curlConnectTimeout;
+		self::$curlTimeout = $curlTimeout ?? self::$curlTimeout;
+
+		self::$registered = true;
+
+		self::enable();
+	}
+
+
+	public static function enable(): void
+	{
+		Debugger::$showBar = false;
+
+		self::$enabled = true;
+	}
+
+
+	public static function disable(): void
+	{
+		Debugger::$showBar = true;
+
+		self::$enabled = false;
 	}
 
 
 	public static function isEnabled(): bool
 	{
 		return self::$enabled;
-	}
-
-
-	public static function setCurlTimeouts(int|null $connectTimeout, int|null $timeout): void
-	{
-		self::$curlConnectTimeout = $connectTimeout ?? self::$curlConnectTimeout;
-		self::$curlTimeout = $timeout ?? self::$curlTimeout;
 	}
 
 
