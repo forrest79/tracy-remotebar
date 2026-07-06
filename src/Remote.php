@@ -104,7 +104,6 @@ class Remote
 				}
 
 				$contentParent = (fn (): array => $this->renderPartial($type))->call(Debugger::getBar());
-				assert(is_string($contentParent['bar']) && is_string($contentParent['panels']));
 
 				$content = '<div id=tracy-debug-bar>' . $contentParent['bar'] . '</div>' . $contentParent['panels'];
 

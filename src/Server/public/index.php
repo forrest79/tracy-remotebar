@@ -4,7 +4,7 @@ use Forrest79\TracyRemoteBar\Server;
 use Tracy\DeferredContent;
 use Tracy\SessionStorage;
 
-if (!@include_once __DIR__ . '/../../../../../autoload.php') { // intentionally @ - file may not exists in package development
+if (! (bool) @include_once __DIR__ . '/../../../../../autoload.php') { // intentionally @ - file may not exists in package development
 	assert(is_string($_SERVER['DOCUMENT_ROOT']));
 	$vendorPosition = strpos($_SERVER['DOCUMENT_ROOT'], '/vendor/');
 	if ($vendorPosition === false) {
